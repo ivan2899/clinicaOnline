@@ -1,0 +1,131 @@
+<div class="role-toggle">
+  <button [class.active]="role === 'paciente'" (click)="setRole('paciente')">
+    Paciente
+  </button>
+
+  <button [class.active]="role === 'especialista'" (click)="setRole('especialista')">
+    Especialista
+  </button>
+</div>
+
+<div class="wrapper" [ngClass]="role">
+  <form [formGroup]="registerForm" (ngSubmit)="onSubmit()">
+    <h1>Registrarse como {{ role | titlecase }}</h1>
+
+    <!-- 🧑 Especialista -->
+    <ng-container *ngIf="role === 'especialista'">
+      <div class="input-box">
+        <input type="text" formControlName="first_name" placeholder="Nombre">
+        <i class='bx bxs-user'></i>
+      </div>
+
+      <div class="input-box">
+        <input type="text" formControlName="last_name" placeholder="Apellido">
+        <i class='bx bxs-user'></i>
+      </div>
+
+      <div class="input-box">
+        <input type="number" formControlName="edad" placeholder="Edad">
+        <i class='bx bxs-cake'></i>
+      </div>
+
+      <div class="input-box">
+        <input type="email" formControlName="email" placeholder="Email">
+        <i class='bx bxs-envelope'></i>
+      </div>
+
+      <div class="input-box">
+        <input type="password" formControlName="password" placeholder="Clave">
+        <i class='bx bxs-lock-alt'></i>
+      </div>
+
+      <div class="input-box">
+        <input type="password" formControlName="confirmPassword" placeholder="Confirmar clave">
+        <i class='bx bxs-lock-alt'></i>
+      </div>
+
+      <div class="input-box">
+        <input type="text" formControlName="dni" placeholder="DNI">
+        <i class='bx bxs-id-card'></i>
+      </div>
+
+      <!-- Selector de especialidad -->
+      <div class="input-box">
+        <select formControlName="especialidad" (change)="onEspecialidadChange($event)">
+          <option value="" disabled selected>Seleccione una especialidad</option>
+          <option value="a">A</option>
+          <option value="b">B</option>
+          <option value="c">C</option>
+          <option value="otra">Otra</option>
+        </select>
+        <i class='bx bxs-briefcase'></i>
+      </div>
+
+      <!-- Input que aparece solo si elige “otra” -->
+      <div class="input-box" *ngIf="showOtraEspecialidad">
+        <input type="text" formControlName="otraEspecialidad" placeholder="Especifique la especialidad">
+        <i class='bx bxs-pencil'></i>
+      </div>
+
+      <div class="input-box">
+        <input type="file" formControlName="imagen" (change)="onFileSelected($event)">
+        <i class='bx bxs-image'></i>
+      </div>
+    </ng-container>
+
+    <!-- 🧍 Paciente -->
+    <ng-container *ngIf="role === 'paciente'">
+      <div class="input-box">
+        <input type="text" formControlName="first_name" placeholder="Nombre">
+        <i class='bx bxs-user'></i>
+      </div>
+
+      <div class="input-box">
+        <input type="text" formControlName="last_name" placeholder="Apellido">
+        <i class='bx bxs-user'></i>
+      </div>
+
+      <div class="input-box">
+        <input type="number" formControlName="edad" placeholder="Edad">
+        <i class='bx bxs-cake'></i>
+      </div>
+
+      <div class="input-box">
+        <input type="text" formControlName="dni" placeholder="DNI">
+        <i class='bx bxs-id-card'></i>
+      </div>
+
+      <div class="input-box">
+        <input type="email" formControlName="email" placeholder="Email">
+        <i class='bx bxs-envelope'></i>
+      </div>
+
+      <div class="input-box">
+        <input type="password" formControlName="password" placeholder="Clave">
+        <i class='bx bxs-lock-alt'></i>
+      </div>
+
+      <div class="input-box">
+        <input type="password" formControlName="confirmPassword" placeholder="Confirmar clave">
+        <i class='bx bxs-lock-alt'></i>
+      </div>
+
+      <div class="input-box">
+        <input type="text" formControlName="obraSocial" placeholder="Obra social">
+        <i class='bx bxs-heart'></i>
+      </div>
+
+      <div class="input-box">
+        <input type="file" formControlName="imagen1" (change)="onFileSelected($event, 'imagen1')">
+        <i class='bx bxs-image'></i>
+      </div>
+
+      <div class="input-box">
+        <input type="file" formControlName="imagen2" (change)="onFileSelected($event, 'imagen2')">
+        <i class='bx bxs-image'></i>
+      </div>
+    </ng-container>
+
+    <button class="btn" type="submit" [disabled]="registerForm.invalid">Registrar</button>
+  </form>
+</div>

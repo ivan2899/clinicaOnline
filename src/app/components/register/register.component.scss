@@ -1,0 +1,190 @@
+.wrapper {
+    width: 80vw;
+    background-color: transparent;
+    border: 2px solid rgba(255, 255, 255, .2);
+    backdrop-filter: blur(35px);
+    box-shadow: 0 0 10px rgba(0, 0, 0, .2);
+    color: #000;
+    border-radius: 10px;
+    padding: 30px 40px;
+}
+
+.wrapper h1 {
+    font-size: 36px;
+    text-align: center;
+}
+
+.wrapper .input-box {
+    position: relative;
+    width: 100%;
+    height: 50px;
+    margin: 30px 0;
+}
+
+.input-box input {
+    width: 100%;
+    height: 100%;
+    background: transparent;
+    border: none;
+    outline: none;
+    border: 2px solid rgba(0, 0, 0, .4);
+    border-radius: 40px;
+    font-size: 16px;
+    color: #000;
+    padding: 20px 45px 20px 20px;
+}
+
+.input-box input::placeholder {
+    color: #000;
+}
+
+.input-box i {
+    position: absolute;
+    right: 20px;
+    top: 50%;
+    transform: translateY(-50%);
+    font-size: 20px;
+}
+
+.wrapper .remember-forgot {
+    display: flex;
+    justify-content: space-between;
+    font-size: 14.5px;
+    margin: -15px 0 15px;
+}
+
+.remember-forgot label input {
+    accent-color: #000;
+    margin-right: 3px;
+}
+
+.remember-forgot a {
+    color: #000;
+    text-decoration: none;
+}
+
+.remember-forgot a:hover {
+    text-decoration: underline;
+}
+
+.wrapper .btn {
+    width: 100%;
+    height: 45px;
+    background-color: rgb(139, 136, 137);
+    border: none;
+    outline: none;
+    border-radius: 40px;
+    box-shadow: 0 0 10 rgba(0, 0, 0, .1);
+    cursor: pointer;
+    font-size: 16px;
+    color: #333;
+    font-weight: 600;
+}
+
+.btnAuto {
+    width: 40% !important;
+    margin-left: 24px;
+    background-color: #514f4f !important;
+    color: #ffffffaa !important;
+}
+
+.wrapper .register-link {
+    font-size: 14.5px;
+    text-align: center;
+    margin: 20px 0 15px;
+}
+
+.register-link p a {
+    color: #000;
+    text-decoration: none;
+    font-weight: 600;
+}
+
+.register-link p a:hover {
+    text-decoration: underline
+}
+
+.role-toggle {
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: 20px;
+    margin-top: 40px;
+    background: rgba(255, 255, 255, 0.1);
+    border-radius: 25px;
+    overflow: hidden;
+    width: 100%;
+
+    button {
+        flex: 1;
+        padding: 10px;
+        border: none;
+        background: #4caf5066;
+        color: #fff;
+        cursor: pointer;
+        font-weight: 600;
+        transition: 0.3s;
+
+        &.active {
+            background-color: #4caf50;
+            color: #fff;
+        }
+
+        &:hover:not(.active) {
+            background-color: rgba(255, 255, 255, 0.2);
+        }
+    }
+}
+
+/* === NUEVO: Layout horizontal con 3 columnas === */
+.wrapper form {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 15px 25px;
+    /* espacio entre columnas y filas */
+    align-items: start;
+}
+
+/* El título ocupa todas las columnas */
+.wrapper h1 {
+    grid-column: span 3;
+    text-align: center;
+    margin-bottom: 10px;
+}
+
+/* Cada input-box ocupa su columna automáticamente */
+.input-box {
+    margin: 10px 0 !important;
+    /* ajusta espacio vertical */
+}
+
+/* El botón Registrar ocupa las 3 columnas */
+.wrapper .btn {
+    grid-column: span 3;
+    justify-self: center;
+    width: 50%;
+    /* lo achicamos un poco para que quede más lindo centrado */
+}
+
+/* Adaptación responsive */
+@media (max-width: 900px) {
+    .wrapper form {
+        grid-template-columns: repeat(2, 1fr);
+    }
+
+    .wrapper .btn,
+    .wrapper h1 {
+        grid-column: span 2;
+    }
+}
+
+@media (max-width: 600px) {
+    .wrapper form {
+        grid-template-columns: 1fr;
+    }
+
+    .wrapper .btn,
+    .wrapper h1 {
+        grid-column: span 1;
+        width: 100%;
+    }
+}

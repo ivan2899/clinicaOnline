@@ -1,0 +1,27 @@
+<header class="main-header">
+  <div class="actions">
+    <button routerLink="home" routerLinkActive="btn-active" class="btn-nav">Inicio</button>
+  </div>
+
+  <p class="titulo">Clinica online</p>
+
+  <div *ngIf="isLoggedIn; else guest" class="d-flex align-items-center gap-3">
+    <div class="text-end">
+      <div class="small user">{{ name }}</div>
+    </div>
+    <button class="btn-nav" (click)="logout()">Cerrar sesión</button>
+  </div>
+
+  <ng-template #guest>
+    <div class="actions">
+      <button routerLink="login" routerLinkActive="btn-active" class="btn-nav">Iniciar sesión</button>
+      <button routerLink="register" routerLinkActive="btn-active" class="btn-nav">Registrarse</button>
+    </div>
+  </ng-template>
+</header>
+
+<main>
+    <ng-content>
+
+    </ng-content>
+</main>

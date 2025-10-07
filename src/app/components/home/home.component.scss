@@ -1,0 +1,76 @@
+.game-card {
+  background-color: transparent;
+  backdrop-filter: blur(20px);
+  border-radius: 50px;
+  overflow: hidden;
+  border: none;
+  box-shadow: 0px 8px 20px rgba(0, 0, 0, 0.6);
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+  cursor: pointer;
+  color: #ddd;
+  height: 100%;
+}
+
+.game-card:hover {
+  transform: translateY(-5px);
+  box-shadow: 0px 12px 25px rgba(0, 0, 0, 0.8);
+}
+
+.game-card .card-img-top {
+  height: 300px;
+  object-fit: cover;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: 15px;
+}
+
+.game-card .card-title {
+  font-size: 1.2rem;
+  font-weight: bold;
+  color: #f6d26c;
+  margin-bottom: 10px;
+}
+
+.game-card .card-text {
+  font-size: 0.95rem;
+  color: #ddd;
+}
+
+.btnChat {
+  background: none;
+  border: none;
+}
+
+.divChat {
+  display: flex;
+  position: absolute;
+  top: 70px;
+  right: 0;
+}
+
+.imgChat {
+  width: 100px;
+}
+
+.encuesta {
+  padding: 12px 30px;
+  font-size: 1rem;
+  font-weight: bold;
+  border: none;
+  border-radius: 30px;
+  background: #f6d26c;
+  color: #333;
+  cursor: pointer;
+  transition: background 0.3s ease, transform 0.2s ease;
+  margin-left: 10px;
+}
+
+.encuesta:hover {
+  background: #ffd8cf;
+  transform: translateY(-2px);
+}
+
+.divEncuesta {
+  display: flex;
+  justify-content: center;
+  margin-top: 40px;
+}

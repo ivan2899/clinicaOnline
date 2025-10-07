@@ -1,0 +1,25 @@
+<div class="wrapper">
+        <form action="">
+            <h1>Iniciar sesión</h1>
+            <div class="input-box user">
+                <input type="text" name="nombre" placeholder="Nombre" [(ngModel)]="username">
+                <i class='bx bxs-user'></i>
+            </div>
+            <div class="input-box">
+                <input type="password" name="clave" placeholder="Clave" [(ngModel)]="password">
+            <i class='bx bxs-lock-alt'></i>
+                </div>
+
+            <button (click)="login()" type="button" class="btn">Ingresar</button>
+            
+            <div class="register-link">
+                <p>No tienes cuenta? <button routerLink="../register" class="btn-nav">Registrarse</button>
+            </div>
+
+            <p class="text-center">Acceso rapido</p>
+            <button type="button" (click)="autoCompletar('paciente')" class="btn btnAuto usr">Paciente</button>
+            <button type="button" (click)="autoCompletar('especialista')" class="btn btnAuto usr">Especilista</button>
+            <button type="button" (click)="autoCompletar('admin')" class="btn btnAuto adm">Admin</button>
+        
+        </form>
+    </div>
