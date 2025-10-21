@@ -1,131 +1,212 @@
-<div class="role-toggle">
-  <button [class.active]="role === 'paciente'" (click)="setRole('paciente')">
-    Paciente
-  </button>
+<div class="role-toggle-images">
+  <div class="role-img" [class.active]="role === 'paciente'" (click)="setRole('paciente')">
+    <img src="https://fuwqovndluczbpnnywse.supabase.co/storage/v1/object/public/images/register/paciente.webp"
+      alt="Paciente">
+    <label>Paciente</label>
+  </div>
 
-  <button [class.active]="role === 'especialista'" (click)="setRole('especialista')">
-    Especialista
-  </button>
+  <div class="role-img" [class.active]="role === 'especialista'" (click)="setRole('especialista')">
+    <img src="https://fuwqovndluczbpnnywse.supabase.co/storage/v1/object/public/images/register/especialista.webp"
+      alt="Especialista">
+    <label>Especialista</label>
+  </div>
 </div>
 
-<div class="wrapper" [ngClass]="role">
-  <form [formGroup]="registerForm" (ngSubmit)="onSubmit()">
-    <h1>Registrarse como {{ role | titlecase }}</h1>
+<div class="container">
+  <div class="wrapper" [ngClass]="role">
+    <form [formGroup]="registerForm" (ngSubmit)="onSubmit()">
+      <h1>Registrarse como {{ role | titlecase }}</h1>
 
-    <!-- 🧑 Especialista -->
-    <ng-container *ngIf="role === 'especialista'">
-      <div class="input-box">
-        <input type="text" formControlName="first_name" placeholder="Nombre">
-        <i class='bx bxs-user'></i>
-      </div>
+      <!-- 🧑 Especialista -->
+      <ng-container *ngIf="role === 'especialista'">
+        <div class="input-box">
+          <input type="text" formControlName="firstName" placeholder="Nombre">
+          <i class='bx bxs-user'></i>
+          <div class="error" *ngIf="registerForm.get('firstName')?.touched && registerForm.get('firstName')?.errors">
+            <small *ngIf="registerForm.get('firstName')?.hasError('required')">El nombre es obligatorio.</small>
+            <small *ngIf="registerForm.get('firstName')?.hasError('minlength')">El nombre debe tener al menos 3
+              letras.</small>
+          </div>
+        </div>
 
-      <div class="input-box">
-        <input type="text" formControlName="last_name" placeholder="Apellido">
-        <i class='bx bxs-user'></i>
-      </div>
+        <div class="input-box">
+          <input type="text" formControlName="lastName" placeholder="Apellido">
+          <i class='bx bxs-user'></i>
+          <div class="error" *ngIf="registerForm.get('lastName')?.touched && registerForm.get('lastName')?.errors">
+            <small *ngIf="registerForm.get('lastName')?.hasError('required')">El apellido es obligatorio.</small>
+            <small *ngIf="registerForm.get('lastName')?.hasError('minlength')">El apellido debe tener al menos 2
+              letras.</small>
+          </div>
+        </div>
 
-      <div class="input-box">
-        <input type="number" formControlName="edad" placeholder="Edad">
-        <i class='bx bxs-cake'></i>
-      </div>
+        <div class="input-box">
+          <input type="number" formControlName="age" placeholder="Edad" (keypress)="soloNumeros($event)">
+          <i class='bx bxs-cake'></i>
+          <div class="error" *ngIf="registerForm.get('age')?.touched && registerForm.get('age')?.errors">
+            <small *ngIf="registerForm.get('age')?.hasError('required')">La edad es obligatoria.</small>
+            <small *ngIf="registerForm.get('age')?.hasError('min')">Debe ser mayor de 16 años.</small>
+            <small *ngIf="registerForm.get('age')?.hasError('max')">Debe ser menor de 120 años.</small>
+          </div>
+        </div>
 
-      <div class="input-box">
-        <input type="email" formControlName="email" placeholder="Email">
-        <i class='bx bxs-envelope'></i>
-      </div>
+        <div class="input-box">
+          <input type="number" formControlName="dni" placeholder="DNI" (keypress)="soloNumeros($event)">
+          <i class='bx bxs-id-card'></i>
+          <div class="error" *ngIf="registerForm.get('dni')?.touched && registerForm.get('dni')?.errors">
+            <small *ngIf="registerForm.get('dni')?.hasError('required')">El DNI es obligatorio.</small>
+            <small *ngIf="registerForm.get('dni')?.hasError('pattern')">El DNI debe tener 8 dígitos.</small>
+          </div>
+        </div>
 
-      <div class="input-box">
-        <input type="password" formControlName="password" placeholder="Clave">
-        <i class='bx bxs-lock-alt'></i>
-      </div>
+        <div class="input-box">
+          <input type="email" formControlName="email" placeholder="Email">
+          <i class='bx bxs-envelope'></i>
+          <div class="error" *ngIf="registerForm.get('email')?.touched && registerForm.get('email')?.errors">
+            <small *ngIf="registerForm.get('email')?.hasError('required')">El email es obligatorio.</small>
+            <small *ngIf="registerForm.get('email')?.hasError('email')">Ingrese un email válido.</small>
+          </div>
+        </div>
 
-      <div class="input-box">
-        <input type="password" formControlName="confirmPassword" placeholder="Confirmar clave">
-        <i class='bx bxs-lock-alt'></i>
-      </div>
+        <div class="input-box">
+          <input type="password" formControlName="password" placeholder="Clave">
+          <i class='bx bxs-lock-alt'></i>
+          <div class="error" *ngIf="registerForm.get('password')?.touched && registerForm.get('password')?.errors">
+            <small *ngIf="registerForm.get('password')?.hasError('required')">La clave es obligatoria.</small>
+            <small *ngIf="registerForm.get('password')?.hasError('minlength')">La clave debe tener al menos 6
+              caracteres.</small>
+          </div>
+        </div>
 
-      <div class="input-box">
-        <input type="text" formControlName="dni" placeholder="DNI">
-        <i class='bx bxs-id-card'></i>
-      </div>
+        <div class="input-box">
+          <input type="password" formControlName="confirmPassword" placeholder="Confirmar clave">
+          <i class='bx bxs-lock-alt'></i>
+          <div class="error"
+            *ngIf="registerForm.get('confirmPassword')?.touched && registerForm.get('confirmPassword')?.errors">
+            <small *ngIf="registerForm.get('confirmPassword')?.hasError('required')">Debe confirmar su clave.</small>
+            <small *ngIf="registerForm.hasError('passwordMismatch')">Las claves no coinciden.</small>
+          </div>
+        </div>
 
-      <!-- Selector de especialidad -->
-      <div class="input-box">
-        <select formControlName="especialidad" (change)="onEspecialidadChange($event)">
-          <option value="" disabled selected>Seleccione una especialidad</option>
-          <option value="a">A</option>
-          <option value="b">B</option>
-          <option value="c">C</option>
-          <option value="otra">Otra</option>
-        </select>
-        <i class='bx bxs-briefcase'></i>
-      </div>
+        <div class="input-box especialidades-container">
+          <label>Seleccione otra especialidad:</label>
+          <div class="especialidades-btns">
+            <button type="button" *ngFor="let esp of especialidades" (click)="seleccionarEspecialidad(esp)"
+              [class.active]="especialidadSeleccionada === esp">
+              {{ esp }}
+            </button>
 
-      <!-- Input que aparece solo si elige “otra” -->
-      <div class="input-box" *ngIf="showOtraEspecialidad">
-        <input type="text" formControlName="otraEspecialidad" placeholder="Especifique la especialidad">
-        <i class='bx bxs-pencil'></i>
-      </div>
+            <!-- Botón "Otra" -->
+            <button type="button" (click)="toggleOtraEspecialidad()" [class.active]="showOtraEspecialidad">
+              Otra
+            </button>
+          </div>
+          <i class='bx bxs-briefcase'></i>
+        </div>
 
-      <div class="input-box">
-        <input type="file" formControlName="imagen" (change)="onFileSelected($event)">
-        <i class='bx bxs-image'></i>
-      </div>
-    </ng-container>
+        <!-- Campo visible pero desactivado hasta que se presione "Otra" -->
+        <div class="input-box">
+          <input type="text" formControlName="otraEspecialidad" placeholder="Especifique la especialidad"
+            [disabled]="!showOtraEspecialidad">
+          <i class='bx bxs-pencil'></i>
+        </div>
 
-    <!-- 🧍 Paciente -->
-    <ng-container *ngIf="role === 'paciente'">
-      <div class="input-box">
-        <input type="text" formControlName="first_name" placeholder="Nombre">
-        <i class='bx bxs-user'></i>
-      </div>
+        <div class="input-box file">
+          <input type="file" id="photo" formControlName="photo" (change)="onFileSelected($event)">
+          <label for="photo" id="fileLabel">Seleccionar imagen de perfil</label>
+          <i class='bx bxs-image'></i>
+        </div>
+      </ng-container>
 
-      <div class="input-box">
-        <input type="text" formControlName="last_name" placeholder="Apellido">
-        <i class='bx bxs-user'></i>
-      </div>
+      <!-- 🧍 Paciente -->
+      <ng-container *ngIf="role === 'paciente'">
+        <div class="input-box">
+          <input type="text" formControlName="firstName" placeholder="Nombre">
+          <i class='bx bxs-user'></i>
+          <div class="error" *ngIf="registerForm.get('firstName')?.touched && registerForm.get('firstName')?.errors">
+            <small *ngIf="registerForm.get('firstName')?.hasError('required')">El nombre es obligatorio.</small>
+            <small *ngIf="registerForm.get('firstName')?.hasError('minlength')">Debe tener al menos 3 letras.</small>
+          </div>
+        </div>
 
-      <div class="input-box">
-        <input type="number" formControlName="edad" placeholder="Edad">
-        <i class='bx bxs-cake'></i>
-      </div>
+        <div class="input-box">
+          <input type="text" formControlName="lastName" placeholder="Apellido">
+          <i class='bx bxs-user'></i>
+          <div class="error" *ngIf="registerForm.get('lastName')?.touched && registerForm.get('lastName')?.errors">
+            <small *ngIf="registerForm.get('lastName')?.hasError('required')">El apellido es obligatorio.</small>
+            <small *ngIf="registerForm.get('lastName')?.hasError('minlength')">Debe tener al menos 2 letras.</small>
+          </div>
+        </div>
 
-      <div class="input-box">
-        <input type="text" formControlName="dni" placeholder="DNI">
-        <i class='bx bxs-id-card'></i>
-      </div>
+        <div class="input-box">
+          <input type="number" formControlName="age" placeholder="Edad" (keypress)="soloNumeros($event)">
+          <i class='bx bxs-cake'></i>
+          <div class="error" *ngIf="registerForm.get('age')?.touched && registerForm.get('age')?.errors">
+            <small *ngIf="registerForm.get('age')?.hasError('required')">La edad es obligatoria.</small>
+            <small *ngIf="registerForm.get('age')?.hasError('min')">Debe ser mayor de 16 años.</small>
+            <small *ngIf="registerForm.get('age')?.hasError('max')">Debe ser menor de 120 años.</small>
+          </div>
+        </div>
 
-      <div class="input-box">
-        <input type="email" formControlName="email" placeholder="Email">
-        <i class='bx bxs-envelope'></i>
-      </div>
+        <div class="input-box">
+          <input type="number" formControlName="dni" placeholder="DNI" (keypress)="soloNumeros($event)">
+          <i class='bx bxs-id-card'></i>
+          <div class="error" *ngIf="registerForm.get('dni')?.touched && registerForm.get('dni')?.errors">
+            <small *ngIf="registerForm.get('dni')?.hasError('required')">El DNI es obligatorio.</small>
+            <small *ngIf="registerForm.get('dni')?.hasError('pattern')">Debe tener 8 dígitos.</small>
+          </div>
+        </div>
 
-      <div class="input-box">
-        <input type="password" formControlName="password" placeholder="Clave">
-        <i class='bx bxs-lock-alt'></i>
-      </div>
+        <div class="input-box">
+          <input type="email" formControlName="email" placeholder="Email">
+          <i class='bx bxs-envelope'></i>
+          <div class="error" *ngIf="registerForm.get('email')?.touched && registerForm.get('email')?.errors">
+            <small *ngIf="registerForm.get('email')?.hasError('required')">El email es obligatorio.</small>
+            <small *ngIf="registerForm.get('email')?.hasError('email')">Ingrese un email válido.</small>
+          </div>
+        </div>
 
-      <div class="input-box">
-        <input type="password" formControlName="confirmPassword" placeholder="Confirmar clave">
-        <i class='bx bxs-lock-alt'></i>
-      </div>
+        <div class="input-box">
+          <input type="password" formControlName="password" placeholder="Clave">
+          <i class='bx bxs-lock-alt'></i>
+          <div class="error" *ngIf="registerForm.get('password')?.touched && registerForm.get('password')?.errors">
+            <small *ngIf="registerForm.get('password')?.hasError('required')">La clave es obligatoria.</small>
+            <small *ngIf="registerForm.get('password')?.hasError('minlength')">Debe tener al menos 6 caracteres.</small>
+          </div>
+        </div>
 
-      <div class="input-box">
-        <input type="text" formControlName="obraSocial" placeholder="Obra social">
-        <i class='bx bxs-heart'></i>
-      </div>
+        <div class="input-box">
+          <input type="password" formControlName="confirmPassword" placeholder="Confirmar clave">
+          <i class='bx bxs-lock-alt'></i>
+          <div class="error"
+            *ngIf="registerForm.get('confirmPassword')?.touched && registerForm.get('confirmPassword')?.errors">
+            <small *ngIf="registerForm.get('confirmPassword')?.hasError('required')">Debe confirmar su clave.</small>
+            <small *ngIf="registerForm.hasError('passwordMismatch')">Las claves no coinciden.</small>
+          </div>
+        </div>
 
-      <div class="input-box">
-        <input type="file" formControlName="imagen1" (change)="onFileSelected($event, 'imagen1')">
-        <i class='bx bxs-image'></i>
-      </div>
+        <div class="input-box">
+          <input type="text" formControlName="healtInsurance" placeholder="Obra social">
+          <i class='bx bxs-heart'></i>
+        </div>
 
-      <div class="input-box">
-        <input type="file" formControlName="imagen2" (change)="onFileSelected($event, 'imagen2')">
-        <i class='bx bxs-image'></i>
-      </div>
-    </ng-container>
+        <div class="input-box file">
+          <input type="file" id="photo" formControlName="photo" (change)="onFileSelected($event)">
+          <label for="photo" id="label-photo">Seleccionar imagen</label>
+          <i class='bx bxs-image'></i>
+        </div>
 
-    <button class="btn" type="submit" [disabled]="registerForm.invalid">Registrar</button>
-  </form>
+        <div class="input-box file">
+          <input type="file" id="photo2" formControlName="photo2" (change)="onFileSelected($event)">
+          <label for="photo2" id="label-photo2">Seleccionar imagen 2</label>
+          <i class='bx bxs-image'></i>
+        </div>
+      </ng-container>
+
+      <!--
+    <ngx-recaptcha2 [siteKey]="siteKey" (success)="onCaptchaResolved($event)">
+    </ngx-recaptcha2> -->
+
+      <button class="btn" type="submit" [disabled]="registerForm.invalid">Registrar</button>
+    </form>
+  </div>
 </div>

@@ -1,0 +1,34 @@
+.spinner-container {
+  position: fixed;
+  inset: 0;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  background-color: rgba(0, 0, 0, 0.4);
+  z-index: 9999;
+}
+
+.spinner-img {
+  width: 100px;
+  height: 100px;
+  animation: spin 1.5s linear infinite;
+}
+
+.loading-text {
+  margin-top: 15px;
+  font-size: 1.2rem;
+  color: white;
+  font-style: italic;
+  font-weight: 500;
+  letter-spacing: 1px;
+}
+
+@keyframes spin {
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(360deg);
+  }
+}

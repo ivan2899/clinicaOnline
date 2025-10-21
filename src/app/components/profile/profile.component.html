@@ -1,0 +1,55 @@
+<div class="perfil-container">
+  <div class="perfil-card">
+    <img
+      [src]="usuario?.first_photo_url || 'https://fuwqovndluczbpnnywse.supabase.co/storage/v1/object/public/images/client/default/iconUser.png'"
+      alt="Foto de perfil" class="perfil-img" />
+
+    <h3 class="text-center">{{ usuario?.role }}</h3>
+
+    <!-- Toggle para cambiar entre secciones -->
+    <div class="toggle-container" *ngIf="usuario?.role === 'Especialista'; else soloInfo">
+      <button [class.active]="seccionActiva === 'info'" (click)="cambiarSeccion('info')">
+        Información
+      </button>
+      <button [class.active]="seccionActiva === 'horarios'" (click)="cambiarSeccion('horarios')">
+        Mis horarios
+      </button>
+    </div>
+
+    <!-- Si no es especialista, solo muestra información -->
+    <ng-template #soloInfo>
+      <h4 class="text-center">Información</h4>
+    </ng-template>
+
+    <!-- Contenido de Información -->
+    <div *ngIf="seccionActiva === 'info' || usuario?.role !== 'Especialista'" class="perfil-info">
+      <p><strong>Nombre:</strong> {{ usuario?.first_name }}</p>
+      <p><strong>Apellido:</strong> {{ usuario?.last_name }}</p>
+      <p><strong>Email:</strong> {{ usuario?.email }}</p>
+      <p><strong>Edad:</strong> {{ usuario?.age }}</p>
+      <p><strong>DNI:</strong> {{ usuario?.dni }}</p>
+
+      <p *ngIf="usuario?.role === 'Paciente'">
+        <strong>Obra social:</strong> {{ usuario?.health_insurance }}
+      </p>
+    </div>
+
+    <!-- Contenido de Mis horarios -->
+    <div *ngIf="seccionActiva === 'horarios'" class="mis-horarios">
+      <h4 class="text-center">Configurar horarios</h4>
+
+      <div class="dias-container">
+        <button *ngFor="let dia of dias" (click)="seleccionarDia(dia)" [class.activo]="diasSeleccionados.includes(dia)">
+          {{ dia }}
+        </button>
+      </div>
+
+      <div class="horarios-form">
+        <label for="cantidadTurnos"><strong>Cantidad de turnos por día:</strong></label>
+        <input id="cantidadTurnos" type="number" min="1" [(ngModel)]="cantidadTurnos" placeholder="Ej: 5" />
+
+        <button class="save" (click)="guardarHorarios()">Guardar horarios</button>
+      </div>
+    </div>
+  </div>
+</div>

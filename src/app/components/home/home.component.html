@@ -1,4 +1,29 @@
 <div class="container my-5">
+    <!--
+    <button (click)="toast()">Probar</button>
+    <button (click)="spinner()">ProbarS</button>
+    -->
 
+    <div class="bienvenida" *ngIf="!isLogged">
+        <h4>Bienvenido a la <strong>Clínica online</strong></h4>
+        <p>Lo que buscamos es optimizar el tiempo a la hora de sacar turnos tanto para el paciente como para el
+            especialista, para ver las opciones de turnos debe iniciar sesión </p>
+        <button class="btn" routerLink="/login">Redirigir</button>
+    </div>
+
+    <div *ngIf="role == 'Admin'">
+        <button>Seccion usuarios</button>
+        <button>Turnos</button>
+        <button>Solicitar turno</button>
+    </div>
+
+    <div *ngIf="role == 'Especialista'">
+        <button>Turnos</button>
+    </div>
+
+    <div *ngIf="role == 'Paciente'">
+        <button >Mis turnos</button>
+        <button class="btn" routerLink="/request-appointment-speciality">Solicitar turno</button>
+    </div>
 </div>
 <router-outlet />

@@ -1,13 +1,15 @@
 <header class="main-header">
   <div class="actions">
     <button routerLink="home" routerLinkActive="btn-active" class="btn-nav">Inicio</button>
+    <button routerLink="about-me" routerLinkActive="btn-active" class="btn-nav">Sobre mi</button>
+    <button routerLink="profile" *ngIf="isLoggedIn" routerLinkActive="btn-active" class="btn-nav">Perfil</button>
   </div>
 
   <p class="titulo">Clinica online</p>
 
   <div *ngIf="isLoggedIn; else guest" class="d-flex align-items-center gap-3">
     <div class="text-end">
-      <div class="small user">{{ name }}</div>
+      <div class="small user">{{ usuario?.first_name }} {{usuario?.last_name}}</div>
     </div>
     <button class="btn-nav" (click)="logout()">Cerrar sesión</button>
   </div>

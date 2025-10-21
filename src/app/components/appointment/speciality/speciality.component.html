@@ -1,0 +1,10 @@
+<div class="container">
+  <div class="card">
+    <h2>Seleccionar Especialidad</h2>
+    <div class="grid">
+      <button *ngFor="let esp of especialidades" (click)="seleccionarEspecialidad(esp)">
+        {{ esp }}
+      </button>
+    </div>
+  </div>
+</div>

@@ -1,0 +1,71 @@
+.container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100vh;
+  background: url('/assets/med-bg.jpg') no-repeat center/cover;
+}
+
+.card {
+  background-color: rgba(20, 25, 35, 0.95);
+  color: white;
+  border-radius: 20px;
+  padding: 30px;
+  text-align: center;
+  width: 400px;
+  box-shadow: 0 0 15px rgba(0, 0, 0, 0.4);
+}
+
+.grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 10px;
+  margin-top: 20px;
+}
+
+button {
+  background-color: #20c997;
+  border: none;
+  border-radius: 8px;
+  padding: 8px;
+  color: white;
+  font-weight: bold;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+button:hover {
+  background-color: #17a589;
+  transform: scale(1.05);
+}
+
+.especialista {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  align-items: center; /* centra verticalmente el texto con la imagen */
+  background: rgba(255, 255, 255, 0.1);
+  border-radius: 12px;
+  padding: 10px;
+  cursor: pointer;
+  transition: 0.3s;
+
+  img {
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+  }
+
+  p {
+    text-align: center;
+    font-style: oblique;
+    font-weight: bold;
+    color: #ffffff;
+    margin: 0;
+    letter-spacing: 0.5px;
+  }
+
+  &:hover {
+    transform: scale(1.05);
+    background: rgba(32, 201, 151, 0.3);
+  }
+}

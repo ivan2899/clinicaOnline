@@ -1,0 +1,11 @@
+<div class="container">
+  <div class="card">
+    <button class="back" (click)="volver()">⟵</button>
+    <h2>Seleccionar día</h2>
+    <div class="grid">
+      <button *ngFor="let dia of dias" (click)="seleccionarDia(dia)">
+      {{ dia }}
+      </button>
+    </div>
+  </div>
+</div>

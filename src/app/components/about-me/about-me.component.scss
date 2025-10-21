@@ -1,0 +1,87 @@
+.about-container {
+    background-color: transparent;
+    border: 2px solid rgba(255, 255, 255, .2);
+    backdrop-filter: blur(25px);
+    box-shadow: 0 0 10px rgba(0, 0, 0, .2);
+    color: #000;
+    border-radius: 10px;
+    padding: 30px 40px;
+    margin: 0 20px;
+}
+
+.about-header {
+    display: flex;
+    gap: 2rem;
+    align-items: flex-start;
+    margin-bottom: 1.5rem;
+}
+
+.about-avatar img{
+    width: 180px;
+    height: 180px;
+    border-radius: 100px;
+    object-fit: cover;
+    background-size: contain;
+}
+
+.about-info h2 {
+    font-size: 2rem;
+    margin: 0;
+    color: #ccb346;
+}
+
+.about-info h3 {
+    font-size: 1.2rem;
+    font-weight: 500;
+    margin: 0.2rem 0 1rem 0;
+    color: #7000d1;
+}
+
+.about-info p {
+    margin-bottom: 1.5rem;
+    line-height: 1.5;
+}
+
+.about-details {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(200px, 1fr));
+    gap: 0.5rem 2rem;
+}
+
+.detail {
+    display: flex;
+    justify-content: space-between;
+}
+
+.detail .label {
+    font-weight: bold;
+    color: #ccb346;
+}
+
+.detail .value {
+    font-weight: normal;
+    color: #000000;
+    margin: 0 20px;
+}
+
+hr {
+    border: none;
+    border-top: 2px solid #ccc;
+    margin: 2rem 0;
+}
+
+.about-game h2 {
+    text-align: center;
+    color: #ccb346;
+    margin-bottom: 1rem;
+}
+
+.about-game h3 {
+    font-weight: bold;
+    margin-bottom: 0.5rem;
+}
+
+.about-game p {
+    text-align: justify;
+    line-height: 1.5;
+}

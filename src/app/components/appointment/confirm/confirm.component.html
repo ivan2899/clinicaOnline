@@ -1,0 +1,19 @@
+<div class="container">
+  <div class="card">
+    <button class="back" (click)="volver()">⟵</button>
+    <h2>Confirmar turno</h2>
+
+    <div class="info">
+      <p><strong>Especialidad:</strong> {{ turno.especialidad }}</p>
+      <p><strong>Especialista:</strong> {{ turno.especialista }}</p>
+      <p><strong>Día:</strong> {{ turno.dia }}</p>
+      <p><strong>Hora:</strong> {{ turno.hora }}</p>
+
+    </div>
+
+    <div class="acciones">
+      <button class="confirmar" (click)="confirmarTurno()">Confirmar turno</button>
+      <button class="cancelar" (click)="cancelar()">Cancelar</button>
+    </div>
+  </div>
+</div>

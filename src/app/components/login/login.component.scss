@@ -1,5 +1,8 @@
-.wrapper{
+.wrapper {
+    display: flex;
     width: 420px;
+    height: 500px;
+    align-items: center;
     background-color: transparent;
     border: 2px solid rgba(255, 255, 255, .2);
     backdrop-filter: blur(35px);
@@ -9,12 +12,12 @@
     padding: 30px 40px;
 }
 
-.wrapper h1{
+.wrapper h1 {
     font-size: 36px;
     text-align: center;
 }
 
-.wrapper .input-box{
+.wrapper .input-box {
     position: relative;
     width: 100%;
     height: 50px;
@@ -34,11 +37,11 @@
     padding: 20px 45px 20px 20px;
 }
 
-.input-box input::placeholder{
+.input-box input::placeholder {
     color: #000;
 }
 
-.input-box i{
+.input-box i {
     position: absolute;
     right: 20px;
     top: 50%;
@@ -46,28 +49,28 @@
     font-size: 20px;
 }
 
-.wrapper .remember-forgot{
+.wrapper .remember-forgot {
     display: flex;
     justify-content: space-between;
     font-size: 14.5px;
     margin: -15px 0 15px;
 }
 
-.remember-forgot label input{
+.remember-forgot label input {
     accent-color: #000;
     margin-right: 3px;
 }
 
-.remember-forgot a{
+.remember-forgot a {
     color: #000;
     text-decoration: none;
 }
 
-.remember-forgot a:hover{
+.remember-forgot a:hover {
     text-decoration: underline;
 }
 
-.wrapper .btn{
+.wrapper .btn {
     width: 100%;
     height: 45px;
     background-color: rgb(139, 136, 137);
@@ -81,30 +84,30 @@
     font-weight: 600;
 }
 
-.btnAuto{
+.btnAuto {
     width: 40% !important;
     margin-left: 24px;
     background-color: #514f4f !important;
     color: #ffffffaa;
 }
 
-.wrapper .register-link{
+.wrapper .register-link {
     font-size: 14.5px;
     text-align: center;
     margin: 20px 0 15px;
 }
 
-.register-link p a{
+.register-link p a {
     color: #fffa;
     text-decoration: none;
     font-weight: 600;
 }
 
-.register-link p a:hover{
+.register-link p a:hover {
     text-decoration: underline
 }
 
-.btn-nav{
+.btn-nav {
     font-style: normal;
     background: transparent;
     border: none;
@@ -115,9 +118,57 @@
     font-weight: bold;
 }
 
-.usr{
-    color: #0a6 !important;
+.autocompletar {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 1.2rem;
 }
-.adm{
-    color: #f40 !important;
+
+.autocompletar p {
+    font-weight: bold;
+    margin-bottom: 0.5rem;
+    color: #333;
+}
+
+.login-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 2rem;
+    /* separación entre form e imágenes */
+    flex-wrap: wrap;
+    /* se adapta en pantallas chicas */
+    min-height: 100vh;
+}
+
+.img-btn {
+    background: none;
+    border: none;
+    cursor: pointer;
+    transition: transform 0.2s ease;
+}
+
+.img-btn img {
+    width: 80px;
+    height: 80px;
+    object-fit: cover;
+    border-radius: 15px;
+    box-shadow: 0 0 8px rgba(0, 0, 0, 0.1);
+    transition: all 0.2s ease;
+    margin: 5px;
+}
+
+.img-btn:hover img {
+    transform: scale(1.1);
+    box-shadow: 0 0 12px rgba(0, 0, 0, 0.2);
+}
+
+.autocompletar h3 {
+  margin-bottom: 0;
+  text-align: center;
+}
+
+.grupo {
+  text-align: center;
 }

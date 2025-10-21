@@ -1,5 +1,6 @@
 <!doctype html>
 <html lang="en">
+
 <head>
   <meta charset="utf-8">
   <title>Clinica online</title>
@@ -7,9 +8,58 @@
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <link rel="icon" type="image/x-icon" href="favicon.ico">
   <link href="https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css" rel="stylesheet">
-  
+  <link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/toastify-js/src/toastify.min.css">
+  <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/toastify-js"></script>
+
 </head>
+
 <body>
   <app-root></app-root>
+
+  <!--
+  TODO:
+No usar calendar
+No usar select
+No usar comboBox
+
+1° La persona llega, se hace atender, el medico le pone una reseña, ve la reseña y lo califica
+al medico
+
+2° La persona cancela el turno, y esa fecha se le libera, el medico lo tiene que ver
+
+3° Viene la persona, y el medico o la clinica cancela el turno, y hay que avisarle a traves de la
+app, que se le canceló el turno
+
+Arreglar el spinner que queda girando cuando cambio de ventana
+
+En el form de registro, que sean dos form quizas en vez de uno, para la parte de la especialidad
+
+Cuando el especialista pone que dias trabaja tiene que poner a que hora arranca y cuantos turnos va a dar y en
+base a eso saco el calculo de a que hora seria cada turno
+
+Guardar las imagenes en la base de dato, comprimir las img y pasarlas a webp
+
+1er sprint
+Login
+○ Los usuarios con perfil Especialista solo pueden ingresar si un usuario administrador aprobó
+su cuenta y verificó el mail al momento de registrarse.
+○ Los usuarios con perfil Paciente solo pueden ingresar si verificaron su mail al
+momento de registrarse.
+
+Seccion usuarios
+
+----
+Requerimientos especiales 
+
+"* Sacar un turno
+Comienza mostrando los PROFESIONALES en botones rectangulares con la imagen del mismo y su nombre por debajo del botón,
+Una vez seleccionado mostrará las ESPECIALIDADES, en botones redondos, con la imagen de la especialidad. En caso de no tener muestra imagen por default,
+
+Una vez seleccionada la especialidad, aparecerán los días y horarios con turnos disponibles para ese PROFESIONAL. Estos botones deben ser cuadrados con bordes redondeados. Formato (09-09 13:15)"
+
+Hacer un modulo para sacar turnos
+
+-->
 </body>
+
 </html>

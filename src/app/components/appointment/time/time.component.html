@@ -1,0 +1,11 @@
+<div class="container">
+  <div class="card">
+    <button class="back" (click)="volver()">⟵</button>
+    <h2>Seleccionar horario</h2>
+    <div class="grid">
+      <button *ngFor="let hora of horarios" (click)="seleccionarHora(hora)">
+      {{ hora }}
+      </button>
+    </div>
+  </div>
+</div>

@@ -1,0 +1,11 @@
+<div class="container">
+  <div class="card">
+    <button class="back" (click)="volver()">⟵</button>
+    <h2>Seleccionar especialista</h2>
+
+    <div class="especialista" *ngFor="let esp of especialistas" (click)="seleccionarEspecialista(esp)">
+      <img [src]="esp.foto" alt="{{esp.nombre}}"> 
+      <p>{{ esp.nombreCompleto }}</p>
+    </div>
+  </div>
+</div>

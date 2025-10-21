@@ -16,3 +16,30 @@
   padding: 100px;
   z-index: 10;
 }
+
+
+
+
+/**/
+.upload-container {
+  text-align: center;
+  margin: 2rem 0;
+}
+
+.file-label {
+  display: inline-block;
+  background: #007bff;
+  color: white;
+  padding: 10px 20px;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: background 0.2s;
+}
+
+.file-label:hover {
+  background: #0056b3;
+}
+
+input[type="file"] {
+  display: none; /* escondemos el input real */
+}

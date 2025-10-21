@@ -2,3 +2,11 @@
     <img src="https://wwgfysczkcuaqjmpqkxo.supabase.co/storage/v1/object/public/images/pags/pageNotFound.png" alt="Fondo">
     <p class="texto">Página no encontrada</p>
 </div>
+
+<div class="upload-container">
+  <label for="fileInput" class="file-label">📸 Subir imagen</label>
+  <input type="file" id="fileInput" accept="image/*" (change)="onFileSelected($event)">
+
+  <label for="uploadFile" class="file-label">📸 Subir</label>
+  <input type="file" id="uploadFile" (change)="cargar($event)">
+</div>

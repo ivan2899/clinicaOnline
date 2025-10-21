@@ -14,8 +14,9 @@ import { MessagesService } from '../../services/messages.service';
 })
 export class LayoutComponent {
   isLoggedIn = false;
-  email = '';
+  id: string = '';
   name = '';
+  usuario: any = {};
 
   private authSub: any;
 
@@ -28,20 +29,37 @@ export class LayoutComponent {
   async ngOnInit() {
     const { data } = await this.supabaseService.getCurrentUser();
     if (data.user) {
+      this.id = data.user.id;
       this.isLoggedIn = true;
       this.name = data.user.user_metadata?.['name'] || data.user.email;
     }
 
-    this.authSub = this.supabaseService.onAuthStateChange((_event, session) => {
+    // 2️⃣ Traer datos completos del perfil desde 'profiles'
+    const { data: perfilData, error: perfilError } = await this.supabaseService.getClientData(this.id);
+    if (!perfilError && perfilData) {
+      this.usuario = perfilData;
+    }
+
+
+    // 3️⃣ Suscripción a cambios de auth (login/logout)
+    this.authSub = this.supabaseService.onAuthStateChange(async (_event, session) => {
       if (session?.user) {
         this.isLoggedIn = true;
         this.name = session.user.user_metadata?.['name'] || session.user.email;
+
+        // Traer datos completos del perfil cuando hay login
+        const { data: perfilData, error: perfilError } = await this.supabaseService.getClientData(session.user.id);
+        if (!perfilError && perfilData) {
+          this.usuario = perfilData;
+        }
       } else {
         this.isLoggedIn = false;
         this.name = '';
+        this.usuario = {};
       }
     });
   }
+
 
   private async logoutInt() {
     await this.supabaseService.signOut();

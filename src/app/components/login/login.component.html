@@ -1,4 +1,5 @@
-<div class="wrapper">
+<div class="login-container">
+    <div class="wrapper">
         <form action="">
             <h1>Iniciar sesión</h1>
             <div class="input-box user">
@@ -7,19 +8,60 @@
             </div>
             <div class="input-box">
                 <input type="password" name="clave" placeholder="Clave" [(ngModel)]="password">
-            <i class='bx bxs-lock-alt'></i>
-                </div>
-
-            <button (click)="login()" type="button" class="btn">Ingresar</button>
-            
-            <div class="register-link">
-                <p>No tienes cuenta? <button routerLink="../register" class="btn-nav">Registrarse</button>
+                <i class='bx bxs-lock-alt'></i>
             </div>
 
-            <p class="text-center">Acceso rapido</p>
-            <button type="button" (click)="autoCompletar('paciente')" class="btn btnAuto usr">Paciente</button>
-            <button type="button" (click)="autoCompletar('especialista')" class="btn btnAuto usr">Especilista</button>
-            <button type="button" (click)="autoCompletar('admin')" class="btn btnAuto adm">Admin</button>
-        
+            <button (click)="login()" type="button" class="btn">Ingresar</button>
+
+            <div class="register-link">
+                <p>No tienes cuenta? <button routerLink="/register" class="btn-nav">Registrarse</button>
+            </div>
         </form>
     </div>
+
+    <div class="autocompletar">
+        <h3>Acceso rápido</h3>
+
+        <div class="grupo">
+            <p>Admin</p>
+            <div class="fila">
+                <button type="button" (click)="autoCompletar('admin')" class="img-btn">
+                    <img src="https://fuwqovndluczbpnnywse.supabase.co/storage/v1/object/public/images/login/admin.webp"
+                        alt="Admin">
+                </button>
+            </div>
+        </div>
+
+        <div class="grupo">
+            <p>Especialista</p>
+            <div class="fila">
+                <button type="button" (click)="autoCompletar('especialistaUno')" class="img-btn">
+                    <img src="https://fuwqovndluczbpnnywse.supabase.co/storage/v1/object/public/images/login/especialistaUno.webp"
+                        alt="Especialista">
+                </button>
+                <button type="button" (click)="autoCompletar('especialistaDos')" class="img-btn">
+                    <img src="https://fuwqovndluczbpnnywse.supabase.co/storage/v1/object/public/images/login/especialistaDos.webp"
+                        alt="Especialista dos">
+                </button>
+            </div>
+        </div>
+
+        <div class="grupo">
+            <p>Paciente</p>
+            <div class="fila">
+                <button type="button" (click)="autoCompletar('pacienteUno')" class="img-btn">
+                    <img src="https://fuwqovndluczbpnnywse.supabase.co/storage/v1/object/public/images/login/pacienteUno.webp"
+                        alt="Paciente">
+                </button>
+                <button type="button" (click)="autoCompletar('pacienteDos')" class="img-btn">
+                    <img src="https://fuwqovndluczbpnnywse.supabase.co/storage/v1/object/public/images/login/pacienteDos.webp"
+                        alt="Paciente dos">
+                </button>
+                <button type="button" (click)="autoCompletar('pacienteTres')" class="img-btn">
+                    <img src="https://fuwqovndluczbpnnywse.supabase.co/storage/v1/object/public/images/login/pacienteTres.webp"
+                        alt="Paciente tres">
+                </button>
+            </div>
+        </div>        
+    </div>
+</div>
