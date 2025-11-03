@@ -3,6 +3,7 @@ import { SupabaseService } from '../../services/supabase.service';
 import { CommonModule } from '@angular/common';
 import { SpinnerService } from '../../services/spinner.service';
 import { FormsModule } from '@angular/forms';
+import { Subscription } from 'rxjs';
 
 @Component({
   selector: 'app-profile',
@@ -12,32 +13,52 @@ import { FormsModule } from '@angular/forms';
   styleUrl: './profile.component.scss'
 })
 export class ProfileComponent {
+  mostrarModal = false;
   usuario: any = {};
   id: string = '';
   dias = ['Lunes', 'Martes', 'Miércoles', 'Jueves', 'Viernes', 'Sábado'];
   diasSeleccionados: string[] = [];
   seccionActiva: 'info' | 'horarios' = 'info';
   cantidadTurnos: number = 0;
+  horasDisponibles: string[] = [];
+  horaSeleccionada: string = '';
 
   constructor(private supabaseService: SupabaseService, private spinnerService: SpinnerService) {
   }
 
   async ngOnInit() {
+
+    // Generar horarios de 8:00 a 12:00 en intervalos de 30m
+    const horas: string[] = [];
+    for (let h = 8; h < 12; h++) {
+      horas.push(`${h}:00`);
+      horas.push(`${h}:30`);
+    }
+    this.horasDisponibles = horas;
+
     this.spinnerService.show(); // ⬅️ Mostrar spinner al iniciar
     try {
+      console.log('1');
+
       // 1️⃣ Traer usuario autenticado
-      const { data: authData, error: authError } = await this.supabaseService.getCurrentUser();
+      const { data: authData, error: authError } = await this.supabaseService.waitWithTimeout(this.supabaseService.getCurrentUser(), 4000);
+      console.log('2');
 
       if (authError) {
         console.error('Error obteniendo usuario:', authError.message);
+        console.log('3');
+
         return;
       }
       if (!authData.user) {
         console.warn('No hay usuario logueado');
+        console.log('4');
+
         return;
       }
 
       this.id = authData.user.id;
+      console.log('5');
 
       // 2️⃣ Traer datos del perfil desde la tabla 'profiles'
       const { data: profileData, error: profileError } = await this.supabaseService.getClientData(this.id);
@@ -46,12 +67,15 @@ export class ProfileComponent {
         console.error('Error obteniendo perfil del usuario:', profileError.message);
         return;
       }
+      console.log('6');
 
       this.usuario = profileData;
       console.log('Usuario actual:', this.usuario);
+      console.log('7');
 
     } catch (err) {
       console.error('Error inesperado:', err);
+      console.log('e');
 
     } finally {
       this.spinnerService.hide(); // ⬅️ Ocultar spinner cuando termina, con éxito o error
@@ -72,11 +96,29 @@ export class ProfileComponent {
     console.log('Días seleccionados:', this.diasSeleccionados);
   }
 
+  seleccionarHora(hora: string) {
+    this.horaSeleccionada = hora;
+  }
+
   async guardarHorarios() {
-    const res = await this.supabaseService.dayLog(this.diasSeleccionados, this.cantidadTurnos)
+    const res = await this.supabaseService.dayLog(this.diasSeleccionados, this.cantidadTurnos, this.horaSeleccionada)
+    this.cerrarModal();
+  }
+
+  cerrarModal() {
+    this.mostrarModal = false;
+    this.seccionActiva = 'info';
   }
 
   cambiarSeccion(seccion: 'info' | 'horarios') {
     this.seccionActiva = seccion;
+
+    if (this.seccionActiva === 'horarios') this.mostrarModal = true;
+  }
+
+  soloNumeros(event: KeyboardEvent) {
+    if (!/[0-9]/.test(event.key)) {
+      event.preventDefault();
+    }
   }
 }

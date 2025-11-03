@@ -99,12 +99,99 @@ button.activo {
   }
 }
 
-.save {
-  margin: 5px;
-  padding: 8px 12px;
+.modal {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(0, 0, 0, 0.6);
+  display: none;
+  justify-content: center;
+  align-items: center;
+  z-index: 1000;
+
+  &.show {
+    display: flex;
+  }
+}
+
+.modal-content {
+  background: rgba(20, 25, 35, 0.95);
+  color: #fff;
+  padding: 25px;
+  border-radius: 15px;
+  width: 400px;
+  text-align: center;
+  box-shadow: 0 0 15px rgba(0, 0, 0, 0.4);
+  position: relative;
+}
+
+.close {
+  position: absolute;
+  top: 10px;
+  right: 15px;
+  background: none;
   border: none;
-  border-radius: 10px;
+  color: white;
+  font-size: 22px;
   cursor: pointer;
-  background-color: #e0e0e0;
-  transition: 0.3s;
+}
+
+.dias-container, .horas-container {
+  margin: 15px 0;
+
+  h4 {
+    margin-bottom: 10px;
+  }
+
+  button {
+    margin: 5px;
+    background: rgba(255, 255, 255, 0.1);
+    border: none;
+    border-radius: 8px;
+    padding: 8px 12px;
+    color: white;
+    cursor: pointer;
+    transition: all 0.3s ease;
+  }
+
+  button:hover {
+    background: rgba(32, 201, 151, 0.4);
+    transform: scale(1.05);
+  }
+
+  button.activo {
+    background: #20c997;
+    color: #fff;
+    box-shadow: 0 0 8px rgba(32, 201, 151, 0.8);
+  }
+}
+
+.horarios-form {
+  margin-top: 20px;
+
+  input {
+    width: 80%;
+    margin: 10px auto;
+    padding: 6px;
+    border-radius: 6px;
+    border: none;
+    text-align: center;
+  }
+
+  .save {
+    background: #20c997;
+    border: none;
+    border-radius: 8px;
+    padding: 10px 20px;
+    font-weight: bold;
+    cursor: pointer;
+    transition: 0.3s;
+  }
+
+  .save:hover {
+    background: #17a589;
+    transform: scale(1.05);
+  }
 }

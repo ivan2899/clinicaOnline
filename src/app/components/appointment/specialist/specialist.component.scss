@@ -3,7 +3,6 @@
   justify-content: center;
   align-items: center;
   height: 100vh;
-  background: url('/assets/med-bg.jpg') no-repeat center/cover;
 }
 
 .card {
@@ -14,13 +13,6 @@
   text-align: center;
   width: 400px;
   box-shadow: 0 0 15px rgba(0, 0, 0, 0.4);
-}
-
-.grid {
-  display: grid;
-  grid-template-columns: repeat(3, 1fr);
-  gap: 10px;
-  margin-top: 20px;
 }
 
 button {
@@ -40,23 +32,27 @@ button:hover {
 }
 
 .especialista {
-  display: grid;
-  grid-template-columns: repeat(2, 1fr);
-  align-items: center; /* centra verticalmente el texto con la imagen */
+  display: flex;
+  flex-direction: column; /* 🔹 Imagen arriba, texto abajo */
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
   background: rgba(255, 255, 255, 0.1);
   border-radius: 12px;
-  padding: 10px;
+  padding: 15px;
   cursor: pointer;
   transition: 0.3s;
+  margin-bottom: 10px; /* espacio entre botones */
+  width: 100%;
 
   img {
-    width: 40px;
-    height: 40px;
+    width: 60px;
+    height: 60px;
     border-radius: 50%;
+    object-fit: cover;
   }
 
   p {
-    text-align: center;
     font-style: oblique;
     font-weight: bold;
     color: #ffffff;

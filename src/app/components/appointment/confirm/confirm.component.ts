@@ -4,8 +4,7 @@ import { AppointmentService } from '../../../services/appointment.service';
 
 @Component({
   selector: 'app-confirm',
-  standalone: true,
-  imports: [],
+  standalone: false,
   templateUrl: './confirm.component.html',
   styleUrl: './confirm.component.scss'
 })

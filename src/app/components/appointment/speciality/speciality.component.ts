@@ -6,8 +6,7 @@ import { AppointmentService } from '../../../services/appointment.service';
 
 @Component({
   selector: 'app-speciality',
-  standalone: true,
-  imports: [CommonModule],
+  standalone: false,
   templateUrl: './speciality.component.html',
   styleUrl: './speciality.component.scss'
 })
@@ -22,7 +21,10 @@ export class SpecialityComponent {
   async ngOnInit() {
     const res = await this.appointmentService.getSpecialitys();
     if (res && res.data) {
-      this.especialidades = res.data.map((e: any) => e.speciality);
+      this.especialidades = res.data.map((e: any) => ({
+        nombre: e.speciality,
+        imagen: e.img_url
+      }));
     }
   }
 
@@ -43,6 +45,10 @@ export class SpecialityComponent {
     this.id = authData.user.id;
     localStorage.setItem('especialidad', nombre);
     localStorage.setItem('usuarioId', this.id);
-    this.router.navigate(['/request-appointment-specialist']);
+    this.router.navigate(['appointment/request-appointment-day']);
+  }
+
+    volver() {
+    this.router.navigate(['appointment/request-appointment-specialist']);
   }
 }

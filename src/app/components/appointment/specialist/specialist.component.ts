@@ -5,8 +5,7 @@ import { AppointmentService } from '../../../services/appointment.service';
 
 @Component({
   selector: 'app-specialist',
-  standalone: true,
-  imports: [CommonModule],
+  standalone: false,
   templateUrl: './specialist.component.html',
   styleUrl: './specialist.component.scss'
 })
@@ -33,10 +32,10 @@ export class SpecialistComponent {
   seleccionarEspecialista(esp: any) {
     localStorage.setItem('especialista', esp.nombreCompleto);
     localStorage.setItem('especialistaId', esp.id);
-    this.router.navigate(['request-appointment-day']);
+    this.router.navigate(['appointment/request-appointment-speciality']);
   }
 
   volver() {
-    this.router.navigate(['/request-appointment-speciality']);
+    this.router.navigate(['/home']);
   }
 }

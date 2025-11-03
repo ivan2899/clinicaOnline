@@ -23,43 +23,56 @@ export class LayoutComponent {
   constructor(
     private router: Router,
     private supabaseService: SupabaseService,
-    private messagesService: MessagesService
+    private messagesService: MessagesService,
   ) { }
 
   async ngOnInit() {
-    const { data } = await this.supabaseService.getCurrentUser();
-    if (data.user) {
-      this.id = data.user.id;
-      this.isLoggedIn = true;
-      this.name = data.user.user_metadata?.['name'] || data.user.email;
-    }
 
-    // 2️⃣ Traer datos completos del perfil desde 'profiles'
-    const { data: perfilData, error: perfilError } = await this.supabaseService.getClientData(this.id);
-    if (!perfilError && perfilData) {
-      this.usuario = perfilData;
-    }
+      this.authSub = this.supabaseService.currentUser$
+      .subscribe(user => {
+        if (user) {
+          // Usuario logueado (incluye carga inicial y revalidación de sesión)
+          this.id = user.id;
+          this.isLoggedIn = true;
 
+          // Obtenemos el nombre del email o metadatos
+          this.name = user.user_metadata?.['name'] || user.email || 'Usuario';
 
-    // 3️⃣ Suscripción a cambios de auth (login/logout)
-    this.authSub = this.supabaseService.onAuthStateChange(async (_event, session) => {
-      if (session?.user) {
-        this.isLoggedIn = true;
-        this.name = session.user.user_metadata?.['name'] || session.user.email;
+          // 1. Llamamos a la función que trae los datos completos del perfil
+          this.fetchProfileData(user.id);
 
-        // Traer datos completos del perfil cuando hay login
-        const { data: perfilData, error: perfilError } = await this.supabaseService.getClientData(session.user.id);
-        if (!perfilError && perfilData) {
-          this.usuario = perfilData;
+        } else {
+          // No hay usuario logueado
+          this.isLoggedIn = false;
+          this.name = '';
+          this.id = '';
+          this.usuario = {};
         }
-      } else {
-        this.isLoggedIn = false;
-        this.name = '';
-        this.usuario = {};
-      }
-    });
+      });   
   }
 
+  // Creamos un método separado para obtener la data del perfil
+  private async fetchProfileData(userId: string) {
+    try {
+      // 2. Traer datos completos del perfil desde 'profiles'
+      const { data: perfilData, error: perfilError } = await this.supabaseService.getClientData(userId);
+
+      if (!perfilError && perfilData) {
+        this.usuario = perfilData;
+
+        // 💡 Actualiza la propiedad 'name' con el nombre y apellido del perfil si están disponibles
+        if (perfilData.first_name && perfilData.last_name) {
+          this.name = `${perfilData.first_name} ${perfilData.last_name}`;
+        }
+
+      } else {
+        console.error('Error al obtener perfil:', perfilError);
+      }
+    } catch (error) {
+      console.error('Error inesperado al cargar perfil:', error);
+    }
+    // Ocultar el spinner si lo mostraste al inicio de este método
+  }
 
   private async logoutInt() {
     await this.supabaseService.signOut();

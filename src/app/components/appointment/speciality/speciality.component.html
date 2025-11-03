@@ -1,9 +1,11 @@
 <div class="container">
   <div class="card">
+    <button class="back" (click)="volver()">⟵</button>
     <h2>Seleccionar Especialidad</h2>
     <div class="grid">
-      <button *ngFor="let esp of especialidades" (click)="seleccionarEspecialidad(esp)">
-        {{ esp }}
+      <button class="item" *ngFor="let esp of especialidades" (click)="seleccionarEspecialidad(esp)">
+        <img [src]="esp.imagen | defaultImage" alt="{{ esp.nombre }}">
+        <span>{{ esp.nombre }}</span>
       </button>
     </div>
   </div>

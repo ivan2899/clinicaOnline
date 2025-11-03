@@ -1,7 +1,7 @@
 <div class="perfil-container">
   <div class="perfil-card">
     <img
-      [src]="usuario?.first_photo_url || 'https://fuwqovndluczbpnnywse.supabase.co/storage/v1/object/public/images/client/default/iconUser.png'"
+      [src]="usuario?.first_photo_url || 'https://fuwqovndluczbpnnywse.supabase.co/storage/v1/object/public/images/clients/default/iconUser.png'"
       alt="Foto de perfil" class="perfil-img" />
 
     <h3 class="text-center">{{ usuario?.role }}</h3>
@@ -33,23 +33,38 @@
         <strong>Obra social:</strong> {{ usuario?.health_insurance }}
       </p>
     </div>
+  </div>
+</div>
 
-    <!-- Contenido de Mis horarios -->
-    <div *ngIf="seccionActiva === 'horarios'" class="mis-horarios">
-      <h4 class="text-center">Configurar horarios</h4>
+<!-- Modal de configuración de horarios -->
+<div class="modal" [class.show]="mostrarModal">
+  <div class="modal-content">
+    <button class="close" (click)="cerrarModal()">×</button>
+    <h3 class="text-center">Configurar horarios</h3>
 
-      <div class="dias-container">
-        <button *ngFor="let dia of dias" (click)="seleccionarDia(dia)" [class.activo]="diasSeleccionados.includes(dia)">
-          {{ dia }}
-        </button>
-      </div>
+    <!-- Días -->
+    <div class="dias-container">
+      <h4>Días disponibles</h4>
+      <button *ngFor="let dia of dias" (click)="seleccionarDia(dia)" [class.activo]="diasSeleccionados.includes(dia)">
+        {{ dia }}
+      </button>
+    </div>
 
-      <div class="horarios-form">
-        <label for="cantidadTurnos"><strong>Cantidad de turnos por día:</strong></label>
-        <input id="cantidadTurnos" type="number" min="1" [(ngModel)]="cantidadTurnos" placeholder="Ej: 5" />
+    <!-- Horas de inicio -->
+    <div class="horas-container">
+      <h4>Hora de inicio</h4>
+      <button *ngFor="let hora of horasDisponibles" (click)="seleccionarHora(hora)"
+        [class.activo]="horaSeleccionada === hora">
+        {{ hora }}
+      </button>
+    </div>
 
-        <button class="save" (click)="guardarHorarios()">Guardar horarios</button>
-      </div>
+    <!-- Cantidad de turnos -->
+    <div class="horarios-form">
+      <label for="cantidadTurnos"><strong>Cantidad de turnos por día:</strong></label>
+      <input id="cantidadTurnos" type="number" min="1" (keypress)="soloNumeros($event)" [(ngModel)]="cantidadTurnos" placeholder="Ej: 5" />
+
+      <button class="save" (click)="guardarHorarios()">Guardar horarios</button>
     </div>
   </div>
 </div>

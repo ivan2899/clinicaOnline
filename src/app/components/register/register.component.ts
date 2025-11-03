@@ -8,6 +8,7 @@ import { MessagesService } from '../../services/messages.service';
 import { dniValidator } from '../../validators/dni.validator';
 import { passwordMatchValidator } from '../../validators/password-match.validator';
 import { UploadService } from '../../services/upload.service';
+import { AppointmentService } from '../../services/appointment.service';
 
 @Component({
   selector: 'app-register',
@@ -20,21 +21,29 @@ export class RegisterComponent {
   @ViewChild('fileInput') fileInput!: ElementRef<HTMLInputElement>;
   role: 'paciente' | 'admin' | 'especialista' = 'paciente';
   registerForm!: FormGroup;
-  especialidades: string[] = ['Cardiología', 'Dermatología', 'Neurología'];
+  especialidades: any;
   especialidadSeleccionada: string | null = null;
   showOtraEspecialidad = false;
-
+  showModal = false;
+  selectedFiles: { photo?: File; photo2?: File } = {};
+  path: string = '';
+  pathDos: string = '';
 
   constructor(
     private fb: FormBuilder,
     private router: Router,
     private supabaseService: SupabaseService,
     private messagesService: MessagesService,
-    private uploadService: UploadService
+    private uploadService: UploadService,
+    private appointmentService : AppointmentService
   ) { }
 
-  ngOnInit() {
+  async ngOnInit() {
     this.initForm();
+    const res = await this.appointmentService.getSpecialitys();
+    if (res && res.data) {
+      this.especialidades = res.data.map((e: any) => e.speciality);
+    }
   }
 
   setRole(role: 'paciente' | 'especialista') {
@@ -53,8 +62,6 @@ export class RegisterComponent {
         password: ['', [Validators.required, Validators.minLength(6)]],
         confirmPassword: ['', Validators.required],
         healtInsurance: [''],
-        photo: [null, Validators.required],
-        photo2: [null, Validators.required],
       }, { validators: passwordMatchValidator });
     } else {
       this.registerForm = this.fb.group({
@@ -67,7 +74,6 @@ export class RegisterComponent {
         dni: ['', [Validators.required, dniValidator]],
         especialidad: ['', Validators.required],
         otraEspecialidad: [{ value: '', disabled: true }],
-        photo: [null, Validators.required],
       }, { validators: passwordMatchValidator });
     }
   }
@@ -88,22 +94,12 @@ export class RegisterComponent {
     this.registerForm.get('otraEspecialidad')?.updateValueAndValidity();
   }
 
-  onFileSelected(event: any) {
+
+  onFileSelected(event: any, controlName: 'photo' | 'photo2') {
     const file = event.target.files[0];
-    const inputId = event.target.id;
-    const label = document.getElementById(`label-${inputId}`) as HTMLElement;
+    if (!file) return;
 
-    // 🔹 Guardar el archivo en el FormControl
-    if (file) {
-      this.registerForm.patchValue({ [inputId]: file });
-      this.registerForm.get(inputId)?.updateValueAndValidity();
-    }
-
-    if (label) {
-      label.textContent = file
-        ? `Seleccionado (${file.name})`
-        : 'Sin archivo seleccionado';
-    }
+    this.selectedFiles[controlName] = file;
   }
 
   soloNumeros(event: KeyboardEvent) {
@@ -151,26 +147,57 @@ export class RegisterComponent {
       this.error(this.traducirError(error.message));
       return;
     }
+    if (this.registerForm.invalid) return;
+
 
     if (data.user) {
-      const file = this.registerForm.value['photo'];
-
-      // 🔹 Subir imagen comprimida y obtener URL
-      const base64 = await this.uploadService.fileToBase64(file)
-
-      const compressedBlob = await this.uploadService.compressImage(base64, 0.8)
-
-      // 🔹 Generar ruta
-      const fileExt = file.name.split('.').pop();
-      const filePath = `clients/${this.role}/${Date.now()}.${fileExt}`;
-
-      // 🔹 Guardar la URL en el formulario para pasársela a saveUserData()
       try {
+        const file = this.selectedFiles.photo;
+        if (!file) return
+
+        console.log('file: ', file);
+
+        // 🔹 Subir imagen comprimida y obtener URL
+        const base64 = await this.uploadService.fileToBase64(file)
+
+        const compressedBlob = await this.uploadService.compressImage(base64, 0.8)
+
+        // 🔹 Generar ruta
+        const fileExt = file.name.split('.').pop();
+        const filePath = `clients/${this.role}/${Date.now()}.${fileExt}`;
+
+        // 🔹 Guardar la URL en el formulario para pasársela a saveUserData()
         const publicUrl = await this.uploadService.uploadPhoto('images', filePath, compressedBlob);
-        console.log('✅ Imagen subida correctamente:', publicUrl);
-        this.registerForm.patchValue({ photo: publicUrl });
+        console.log('Form antes de patchValue:', this.registerForm);
+        this.path = publicUrl
+        console.log('Form después de patchValue:', this.registerForm.value);
       } catch (error) {
         console.error('❌ Falló la subida:', error);
+        console.error('🧱 Error completo:', JSON.stringify(error, Object.getOwnPropertyNames(error)));
+      }
+
+      if (this.role == 'paciente') {
+        try {
+          const file2 = this.selectedFiles.photo2;
+          if (!file2) return
+
+          console.log('file2: ', file2);
+
+          // 🔹 Subir imagen comprimida y obtener URL
+          const base64 = await this.uploadService.fileToBase64(file2)
+
+          const compressedBlob = await this.uploadService.compressImage(base64, 0.8)
+
+          // 🔹 Generar ruta
+          const fileExt = file2.name.split('.').pop();
+          const filePath = `clients/${this.role}/${Date.now()}.${fileExt}`;
+
+          // 🔹 Guardar la URL en el formulario para pasársela a saveUserData()
+          const publicUrl = await this.uploadService.uploadPhoto('images', filePath, compressedBlob);
+          this.pathDos = publicUrl
+        } catch (error) {
+          console.error('❌ Falló la subida:', error);
+        }
       }
 
       await this.saveUserData(data.user);
@@ -193,20 +220,6 @@ export class RegisterComponent {
 
     switch (this.role) {
       case 'paciente':
-        console.log(this.registerForm.value.firstName,
-          this.registerForm.value.lastName,
-          this.registerForm.value.age,
-          this.registerForm.value.dni,
-          this.registerForm.value.email,
-          this.registerForm.value.healtInsurance,
-          this.registerForm.value.photo,
-          this.registerForm.value.photoDos);
-
-        console.log('Guardando perfil: ',
-          this.registerForm.value.photo,
-          this.registerForm.value.photoDos
-        );
-
         const { error: pacienteError } = await this.supabaseService.saveUserDataPac(
           user,
           this.registerForm.value.firstName,
@@ -215,8 +228,8 @@ export class RegisterComponent {
           this.registerForm.value.dni,
           this.registerForm.value.email,
           this.registerForm.value.healtInsurance,
-          this.registerForm.value.photo,
-          this.registerForm.value.photoDos
+          this.path,
+          this.pathDos
         );
 
         if (pacienteError) {
@@ -234,7 +247,7 @@ export class RegisterComponent {
           this.registerForm.value.age,
           this.registerForm.value.dni,
           this.registerForm.value.email,
-          this.registerForm.value.photo
+          this.path
         );
 
         if (adminError) {
@@ -254,7 +267,7 @@ export class RegisterComponent {
           this.registerForm.value.dni,
           this.registerForm.value.email,
           this.registerForm.value.specialty,
-          this.registerForm.value.photo
+          this.path
         );
 
         if (especialistaError) {
@@ -319,4 +332,26 @@ export class RegisterComponent {
     }
   }
 
+  abrirModal() {
+    this.showModal = true;
+  }
+
+  cerrarModal() {
+    this.showModal = false;
+    this.showOtraEspecialidad = false;
+  }
+
+  guardarEspecialidad() {
+    if (this.showOtraEspecialidad) {
+      const otra = this.registerForm.get('otraEspecialidad')?.value;
+      if (!otra) {
+        console.warn('Ingrese la especialidad');
+        return;
+      }
+      this.especialidadSeleccionada = otra;
+    }
+
+    console.log('Especialidad seleccionada:', this.especialidadSeleccionada);
+    this.cerrarModal();
+  }
 }

@@ -3,7 +3,6 @@
   justify-content: center;
   align-items: center;
   height: 100vh;
-  background: url('/assets/med-bg.jpg') no-repeat center/cover;
 }
 
 .card {
@@ -12,29 +11,49 @@
   border-radius: 20px;
   padding: 30px;
   text-align: center;
-  width: 400px;
-  box-shadow: 0 0 15px rgba(0,0,0,0.4);
+  width: 700px;
+  box-shadow: 0 0 15px rgba(0, 0, 0, 0.4);
 }
 
 .grid {
   display: grid;
   grid-template-columns: repeat(3, 1fr);
   gap: 10px;
-  margin-top: 20px;
+  margin-top: 5px;
 }
 
-button {
-  background-color: #20c997;
+.item {
+  background-color: rgba(255, 255, 255, 0.1);
   border: none;
-  border-radius: 8px;
-  padding: 8px;
+  border-radius: 50%; /* 🔹 redondo */
+  width: 150px;       /* 🔹 tamaño fijo del botón */
+  height: 150px;
   color: white;
   font-weight: bold;
   cursor: pointer;
   transition: all 0.3s ease;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  overflow: hidden; /* para que nada sobresalga */
 }
 
-button:hover {
-  background-color: #17a589;
-  transform: scale(1.05);
+.item img {
+  width: 90px;  /* 🔹 tamaño fijo de imagen */
+  height: 90px;
+  border-radius: 50%; /* imagen también redonda */
+  object-fit: cover;  /* recorta bien imágenes grandes */
+  margin-bottom: 5px;
+}
+
+.item span {
+  font-size: 13px;
+  font-weight: 500;
+  text-align: center;
+}
+
+.item:hover {
+  background-color: #20c997;
+  transform: scale(1.1);
 }

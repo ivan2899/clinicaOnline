@@ -4,9 +4,11 @@
 </div>
 
 <div class="upload-container">
-  <label for="fileInput" class="file-label">📸 Subir imagen</label>
+  <label for="fileInput" class="file-label">📸 Comprimir imagen</label>
   <input type="file" id="fileInput" accept="image/*" (change)="onFileSelected($event)">
 
-  <label for="uploadFile" class="file-label">📸 Subir</label>
+  <label for="uploadFile" class="file-label">📸 Subir a la base</label>
   <input type="file" id="uploadFile" (change)="cargar($event)">
+  
+  <button (click)="generarPDF()">PDF</button>
 </div>

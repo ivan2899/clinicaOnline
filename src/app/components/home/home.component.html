@@ -1,9 +1,4 @@
 <div class="container my-5">
-    <!--
-    <button (click)="toast()">Probar</button>
-    <button (click)="spinner()">ProbarS</button>
-    -->
-
     <div class="bienvenida" *ngIf="!isLogged">
         <h4>Bienvenido a la <strong>Clínica online</strong></h4>
         <p>Lo que buscamos es optimizar el tiempo a la hora de sacar turnos tanto para el paciente como para el
@@ -11,19 +6,59 @@
         <button class="btn" routerLink="/login">Redirigir</button>
     </div>
 
-    <div *ngIf="role == 'Admin'">
-        <button>Seccion usuarios</button>
-        <button>Turnos</button>
-        <button>Solicitar turno</button>
+    <div class="row g-4 justify-content-center">
+        <div class="col-md-3" *ngIf="role == 'Paciente' || role == 'Admin'">
+            <div class="card game-card" routerLink="/appointment/request-appointment-specialist">
+                <img class="card-img-top"
+                    src="https://fuwqovndluczbpnnywse.supabase.co/storage/v1/object/public/images/clients/default/newAppointment.webp"
+                    alt="Ahorcado">
+                <div class="card-body text-center">
+                    <h5 class="card-title">Solicitar turno</h5>
+                    <p class="card-text">Deberá ingresar aquí cuando necesite obtener un nuevo turno.
+                    </p>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-md-3" *ngIf="role == 'Paciente' || role == 'Especialista' || role == 'Admin'">
+            <div class="card game-card">
+                <img class="card-img-top"
+                    src="https://fuwqovndluczbpnnywse.supabase.co/storage/v1/object/public/images/clients/default/myAppointment.webp"
+                    alt="Ahorcado">
+                <div class="card-body text-center">
+                    <h5 class="card-title">{{text}}</h5>
+                    <p class="card-text">Desde aquí puede acceder a cada uno de sus turnos ya solicitados.
+                    </p>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-md-3" *ngIf="role == 'Admin'">
+            <div class="card game-card">
+                <img class="card-img-top"
+                    src="https://wwgfysczkcuaqjmpqkxo.supabase.co/storage/v1/object/public/images/logos/logoAhorcado.png"
+                    alt="Ahorcado">
+                <div class="card-body text-center">
+                    <h5 class="card-title">Seccion usuarios</h5>
+                    <p class="card-text">Desde esta seccion se pueden ver los usuarios que forman parte de la clinica.
+                    </p>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-md-3" *ngIf="role == 'Paciente' || role == 'Especialista'">
+            <div class="card game-card">
+                <img class="card-img-top"
+                    src="https://fuwqovndluczbpnnywse.supabase.co/storage/v1/object/public/images/clients/default/history.webp"
+                    alt="Ahorcado">
+                <div class="card-body text-center">
+                    <h5 class="card-title">Historia clinica</h5>
+                    <p class="card-text">Puede ingresar para ver su historial con la clínica, o con algun especialista.
+                    </p>
+                </div>
+            </div>
+        </div>
     </div>
 
-    <div *ngIf="role == 'Especialista'">
-        <button>Turnos</button>
-    </div>
-
-    <div *ngIf="role == 'Paciente'">
-        <button >Mis turnos</button>
-        <button class="btn" routerLink="/request-appointment-speciality">Solicitar turno</button>
-    </div>
 </div>
 <router-outlet />

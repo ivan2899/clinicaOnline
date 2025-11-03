@@ -5,52 +5,78 @@ import { SupabaseService } from '../../services/supabase.service';
 import { MessagesService } from '../../services/messages.service';
 import Toastify from 'toastify-js'
 import { SpinnerService } from '../../services/spinner.service';
+import { FormsModule } from '@angular/forms';
+import { Subscription } from 'rxjs';
+import { User } from '@supabase/supabase-js';
+
 
 @Component({
   selector: 'app-home',
   standalone: true,
-  imports: [RouterLink, RouterOutlet, CommonModule],
+  imports: [RouterLink, RouterOutlet, CommonModule, FormsModule],
   templateUrl: './home.component.html',
   styleUrl: './home.component.scss'
 })
 export class HomeComponent {
   isLogged = false;
   role: string | null = '';
+  text: string = 'Mis turnos';
+
+  private authSubscription: Subscription = new Subscription();
 
   constructor(private spinnerService: SpinnerService, private supabaseService: SupabaseService) {
   }
 
   async ngOnInit() {
+    // Muestra el spinner inmediatamente
+    this.spinnerService.show();
+
+    // 1. Suscripción al estado del usuario
+    this.authSubscription = this.supabaseService.currentUser$
+      .subscribe(user => {
+        // Este código se ejecuta SIEMPRE que Supabase termine de verificar la sesión
+        // (al inicio, al volver a la pestaña, al loguearse/desloguearse)
+
+        if (user) {
+          // Usuario encontrado: procede a buscar el rol
+          this.isLogged = true;
+          this.fetchUserRoleAndData(user);
+        } else {
+          // No hay usuario logueado
+          this.isLogged = false;
+          this.role = null;
+          this.spinnerService.hide();
+        }
+      });
+  }
+
+  // Nueva función asíncrona para traer los datos después de la autenticación
+  private async fetchUserRoleAndData(user: User) {
     try {
-      this.spinnerService.show();
-
-      // 🔹 1. Obtener usuario actual
-      const { data: authData, error: authError } = await this.supabaseService.getCurrentUser();
-
-      if (authError || !authData?.user) {
-        console.warn('No hay usuario logueado o error al obtenerlo:', authError?.message);
-        this.isLogged = false;
-        return;
-      }
-
-      // ✅ Usuario logueado
-      this.isLogged = true;
-
-      // 🔹 2. Obtener rol del usuario (usa el auth_id)
-      const { data: roleData, error: roleError } = await this.supabaseService.getRole(authData.user.id);
+      // 2. Obtener rol del usuario
+      const { data: roleData, error: roleError } = await this.supabaseService.getRole(user.id);
 
       if (roleError) {
         console.error('Error obteniendo rol:', roleError.message);
         this.role = null;
       } else {
         this.role = roleData?.role || null;
-        console.log('Rol del usuario:', this.role);
+        switch (this.role) {
+          case 'Paciente':
+            this.text = 'Bienvenido, Paciente';
+            break;
+          case 'Especialista':
+            this.text = 'Panel del Especialista';
+            break;
+          case 'Admin':
+            this.text = 'Turnos';
+            break;
+        }
       }
-
     } catch (err) {
-      console.error('Error inesperado:', err);
-      this.isLogged = false;
+      console.error('Error al cargar datos adicionales:', err);
     } finally {
+      // 3. Ocultar el spinner SOLO después de que toda la data haya sido cargada
       this.spinnerService.hide();
     }
   }
@@ -77,5 +103,10 @@ export class HomeComponent {
     setTimeout(() => {
       this.spinnerService.hide();
     }, 2000);
+  }
+
+  ngOnDestroy(): void {
+    // Importante: Limpia la suscripción para evitar pérdidas de memoria
+    this.authSubscription.unsubscribe();
   }
 }

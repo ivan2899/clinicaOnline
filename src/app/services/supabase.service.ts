@@ -1,6 +1,8 @@
 import { Injectable } from '@angular/core';
 import { AuthChangeEvent, createClient, RealtimeChannel, Session, SupabaseClient, User } from '@supabase/supabase-js';
 import { environment } from '../../environments/environment';
+import { BehaviorSubject, Observable } from 'rxjs';
+import { filter, map } from 'rxjs/operators';
 
 @Injectable({
   providedIn: 'root'
@@ -8,12 +10,44 @@ import { environment } from '../../environments/environment';
 export class SupabaseService {
   private supabase: SupabaseClient;
 
+  // 1. BehaviorSubject para el estado de la sesión
+  // Se inicializa en 'undefined' para indicar que aún no se ha verificado el estado.
+  private _session$ = new BehaviorSubject<Session | undefined | null>(undefined);
+
+  // Observable público para que los componentes se suscriban
+  public session$: Observable<Session | null | undefined> = this._session$.asObservable();
+
+  // Observable para el usuario, más conveniente para los componentes
+  public currentUser$: Observable<User | null> = this.session$.pipe(
+    filter(session => session !== undefined), // Esperamos a que se determine el estado inicial
+    // Mapeamos la sesión a solo el objeto User
+    // Si la sesión es null, el usuario es null.
+    // Si la sesión tiene un objeto, tomamos session.user
+    map(session => (session ? session.user : null))
+  );
+
   constructor() {
-    this.supabase = createClient(environment.apiUrl, environment.publicAnonKey);
+    this.supabase = createClient(
+      environment.apiUrl, environment.publicAnonKey,
+    );
+
+    // Configura la suscripción al estado de autenticación de Supabase
+    this.setupAuthStateListener();
+  }
+
+  // Método central para manejar el estado de autenticación
+  private setupAuthStateListener() {
+    // Escucha todos los eventos de cambio de estado de autenticación (LOGIN, LOGOUT, REFRESH, INITIAL_SESSION)
+    this.supabase.auth.onAuthStateChange((event, session) => {
+      // 2. Actualizamos el BehaviorSubject con el estado más reciente de la sesión
+      this._session$.next(session);
+
+      console.log('Auth Event:', event, 'Session:', session ? 'Active' : 'Inactive');
+    });
   }
 
   // ------------------
-  // 🔹 AUTH
+  // 🔹 AUTH (Se mantienen tus métodos, pero ahora se recomienda usar session$ o currentUser$)
   // ------------------
 
   async signIn(email: string, password: string) {
@@ -28,17 +62,34 @@ export class SupabaseService {
     return await this.supabase.auth.signOut();
   }
 
+  // Este método ahora es redundante si usas session$, pero lo mantenemos para compatibilidad
   async getSession() {
     return await this.supabase.auth.getSession();
   }
 
-  onAuthStateChange(callback: (event: AuthChangeEvent, session: Session | null) => void) {
-    return this.supabase.auth.onAuthStateChange(callback);
+  // Este método se simplifica o se vuelve redundante si usas currentUser$
+  async getCurrentUser() {
+    // o simplemente obtener el usuario de la sesión, no es necesario hacer un 'getUser' extra
+    const { data: sessionData, error: sessionError } = await this.supabase.auth.getSession();
+
+    if (sessionError || !sessionData?.session) {
+      return { data: { user: null }, error: sessionError || { message: 'No hay sesión activa' } };
+    }
+
+    return { data: { user: sessionData.session.user }, error: null };
   }
 
-  async getCurrentUser() {
-    return await this.supabase.auth.getUser();
+  // Ya no necesitas este método de timeout, el patrón de BehaviorSubject lo soluciona
+  async waitWithTimeout(promise: Promise<any>, ms: number) {
+    const timeout = new Promise((_, reject) =>
+      setTimeout(() => reject(new Error('Timeout esperando Supabase')), ms)
+    );
+    return Promise.race([promise, timeout]);
   }
+
+  // ------------------
+  // 🔹 Perfiles y Datos (el resto se mantiene igual)
+  // ------------------
 
   async getRole(id: string) {
     return await this.supabase
@@ -80,6 +131,13 @@ export class SupabaseService {
       .eq('email', email);
   }
 
+  async getStatus(id: string) {
+    return await this.supabase
+      .from('profiles')
+      .select('status, role')
+      .eq('auth_id', id);
+  }
+
   async saveUserDataPac(user: User, firstName: string, lastName: string, age: number, dni: number, email: string, healtInsurance: string, firstPhotoUrl: string, secondPhotoUrl: string) {
     return await this.supabase
       .from('profiles')
@@ -104,19 +162,7 @@ export class SupabaseService {
   // 🔹 Cargas
   // ------------------
 
-  async surveyLog(name: string, age: number, phone: number, game: string, difficult: string, suggestion: string) {
-    const res = await this.getCurrentUser();
-    const user = res.data.user;
-
-    if (!user) {
-      throw new Error("No hay usuario logueado");
-    }
-    await this.supabase
-      .from('datos-encuesta')
-      .insert([{ name, age, phone, game, difficult, suggestion, user: user.email }]);
-  }
-
-  async dayLog(days: string[], quantity: number) {
+  async dayLog(days: string[], quantity: number, time: string) {
     // 1️⃣ Obtener usuario actual
     const res = await this.getCurrentUser();
     const user = res.data.user;
@@ -142,6 +188,7 @@ export class SupabaseService {
       .upsert(
         {
           specialist_id: user.id,
+          time_start: time,
           ...dayFields,
         },
         { onConflict: 'specialist_id' } // 👈 importante, evita duplicados

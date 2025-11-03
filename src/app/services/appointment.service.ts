@@ -11,7 +11,7 @@ export class AppointmentService {
   async getSpecialitys() {
     const { data, error } = await this.supabase.client
       .from('specialitys')
-      .select('speciality')
+      .select('*')
 
     return { data, error };
   }

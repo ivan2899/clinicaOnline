@@ -1,6 +1,7 @@
 import { Component } from '@angular/core';
 import { SupabaseService } from '../../services/supabase.service';
 import { UploadService } from '../../services/upload.service';
+import { PdfService } from '../../services/pdf.service';
 
 @Component({
   selector: 'app-page-not-found',
@@ -11,7 +12,7 @@ import { UploadService } from '../../services/upload.service';
 })
 export class PageNotFoundComponent {
 
-  constructor(private uploadService: UploadService) {
+  constructor(private uploadService: UploadService, private pdfService: PdfService) {
 
   }
 
@@ -127,6 +128,10 @@ export class PageNotFoundComponent {
       reader.onload = () => resolve(reader.result as string);
       reader.onerror = (error) => reject(error);
     });
+  }
+
+  generarPDF(){
+    this.pdfService.generatePdf('Historia clinica', 'Esta es una prueba para ver como se descarga el pdf')
   }
 
 }

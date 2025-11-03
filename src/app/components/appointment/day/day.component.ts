@@ -5,8 +5,7 @@ import { SupabaseService } from '../../../services/supabase.service';
 
 @Component({
   selector: 'app-day',
-  standalone: true,
-  imports: [CommonModule],
+  standalone: false,
   templateUrl: './day.component.html',
   styleUrl: './day.component.scss'
 })
@@ -27,10 +26,10 @@ export class DayComponent {
 
   seleccionarDia(dia: any) {
     localStorage.setItem('dia', JSON.stringify(dia));
-    this.router.navigate(['/request-appointment-time']);
+    this.router.navigate(['appointment/request-appointment-confirm']);
   }
 
   volver() {
-    this.router.navigate(['/request-appointment-specialist']);
+    this.router.navigate(['appointment/request-appointment-speciality']);
   }
 }

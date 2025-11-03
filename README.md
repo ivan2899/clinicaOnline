@@ -1,27 +1,29 @@
-# TpClinicaOnline
 
-This project was generated with [Angular CLI](https://github.com/angular/angular-cli) version 18.2.1.
+# **Clinica online**
 
-## Development server
+La web permite a los usuarios registrarse con diferentes tipos de perfiles, como pacientes, especialistas y administradores, ofreciendo funcionalidades específicas para cada uno.
+-----
+[Sitio WEB de la clinica](https://clinicaonline-2a62f.web.app)
+-----
 
-Run `ng serve` for a dev server. Navigate to `http://localhost:4200/`. The application will automatically reload if you change any of the source files.
+## Home
+> Es el inicio de la web, te redirecciona aquí al empezar.
+![principal](https://fuwqovndluczbpnnywse.supabase.co/storage/v1/object/public/images/readme/home/welcome.png)
 
-## Code scaffolding
+## Login
+> Es el inicio de sesion de la web, el paciente debera verificar su mail para poder ingresar por primera vez, y si es un Especialista, va a tener que ser aceptado por un administrador.
+![image](https://fuwqovndluczbpnnywse.supabase.co/storage/v1/object/public/images/readme/login/login.png)
 
-Run `ng generate component component-name` to generate a new component. You can also use `ng generate directive|pipe|service|class|guard|interface|enum|module`.
+## Register
+> Esta zona es para que los usuairos puedan registrarse, para agregar un admin unicamente lo puede hacer otro con el mismo rol
+* Registro para paciente
+![image](https://fuwqovndluczbpnnywse.supabase.co/storage/v1/object/public/images/readme/register/registerp.png)
 
-## Build
+* Registro para especialista
+![image](https://fuwqovndluczbpnnywse.supabase.co/storage/v1/object/public/images/readme/register/registere.png)
+* Eleccion de especialidad
+![image](https://fuwqovndluczbpnnywse.supabase.co/storage/v1/object/public/images/readme/register/registeree.png)
 
-Run `ng build` to build the project. The build artifacts will be stored in the `dist/` directory.
-
-## Running unit tests
-
-Run `ng test` to execute the unit tests via [Karma](https://karma-runner.github.io).
+## Turnos
 
 ## Running end-to-end tests
-
-Run `ng e2e` to execute the end-to-end tests via a platform of your choice. To use this command, you need to first add a package that implements end-to-end testing capabilities.
-
-## Further help
-
-To get more help on the Angular CLI use `ng help` or go check out the [Angular CLI Overview and Command Reference](https://angular.dev/tools/cli) page.

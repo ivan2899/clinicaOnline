@@ -64,9 +64,9 @@ export class MessagesService {
     });
   }
 
-  wrongAnswer(text: string) {
+  wrongRole(text: string) {
     Swal.fire({
-      title: '😢 UPS, te equivocaste',
+      title: '😢 UPS, no es un rol permitido',
       text: text,
       icon: 'error',
       timer: 2000,
@@ -74,34 +74,6 @@ export class MessagesService {
       showConfirmButton: false,
       background: '#fccfcf'
     });
-  }
-
-  endGame(title: string, text: string): Promise<boolean> {
-    return Swal.fire({
-      title: title,
-      text: text,
-      icon: 'info',
-      background: "rgba(145, 35, 22, 1)",
-      showCancelButton: true,
-      cancelButtonText: "Cancelar",
-      confirmButtonText: '🔄 Reiniciar juego',
-      color: '#000',
-      allowOutsideClick: false
-    }).then((result) => { return result.isConfirmed; });
-  }
-
-  winGame(title: string, text: string): Promise<boolean> {
-    return Swal.fire({
-      title: title,
-      text: text,
-      icon: 'success',
-      background: "rgba(26, 137, 12, 1)",
-      showCancelButton: true,
-      cancelButtonText: "Cancelar",
-      confirmButtonText: '🔄 Reiniciar juego',
-      color: '#000',
-      allowOutsideClick: false
-    }).then((result) => { return result.isConfirmed; });
   }
 
   anonymous() {
@@ -138,10 +110,10 @@ export class MessagesService {
     });
   }
 
-  wrongRole() {
+  wrongStatus(text : string) {
     Swal.fire({
       title: 'Acceso denegado',
-      text: 'No puedes ingresar, no eres admin.',
+      text: text,
       icon: 'error',
       background: "#fccfcf",
       confirmButtonText: 'OK'
