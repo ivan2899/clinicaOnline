@@ -4,7 +4,7 @@
     <h2>Seleccionar especialista</h2>
 
     <div class="especialista" *ngFor="let esp of especialistas" (click)="seleccionarEspecialista(esp)">
-      <img [src]="esp.foto" alt="{{esp.nombre}}"> 
+      <img [src]="esp.foto | defaultSpecialist" alt="{{esp.nombre}}"> 
       <p>{{ esp.nombreCompleto }}</p>
     </div>
   </div>

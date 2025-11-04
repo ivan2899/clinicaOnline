@@ -234,7 +234,7 @@ export class SupabaseService {
   async getQuantitySeleccionados(userId: string): Promise<any> {
     const { data, error } = await this.supabase
       .from('days_worked')
-      .select('quantity')
+      .select('quantity, time_start')
       .eq('specialist_id', userId)
       .single();
 

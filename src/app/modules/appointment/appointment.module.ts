@@ -1,6 +1,7 @@
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { DefaultImagePipe } from '../../pipes/default-image.pipe';
+import { DefaultSpecialistPipe } from '../../pipes/default-specialist.pipe';
 
 import { AppointmentRoutingModule } from './appointment-routing.module';
 import { SpecialistComponent } from '../../components/appointment/specialist/specialist.component';
@@ -10,7 +11,7 @@ import { ConfirmComponent } from '../../components/appointment/confirm/confirm.c
 
 
 @NgModule({
-  declarations: [SpecialistComponent, SpecialityComponent, DayComponent, ConfirmComponent, DefaultImagePipe],
+  declarations: [SpecialistComponent, SpecialityComponent, DayComponent, ConfirmComponent, DefaultImagePipe, DefaultSpecialistPipe],
   imports: [
     CommonModule,
     AppointmentRoutingModule

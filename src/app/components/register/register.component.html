@@ -183,13 +183,19 @@
           <label for="photo2">Seleccionar foto 2</label>
         </div>
 
+        <!--
+        <re-captcha (resolved)="resolved($event)" formControlName="recaptcha"></re-captcha>
+        <div *ngIf="!captchaToken && registerForm.valid && isSubmitted" style="color: red; margin-top: 10px;">
+          Por favor, espera la verificación de reCAPTCHA.
+        </div>-->
+
       </ng-container>
 
       <!--
     <ngx-recaptcha2 [siteKey]="siteKey" (success)="onCaptchaResolved($event)">
     </ngx-recaptcha2> -->
 
-      <button class="btn" type="submit" [disabled]="registerForm.invalid">Registrar</button>
+      <button class="btn" type="submit" [disabled]="registerForm.invalid || !captchaToken">Registrar</button>
     </form>
   </div>
 </div>

@@ -10,7 +10,7 @@ import { MessagesService } from '../../services/messages.service';
   standalone: true,
   imports: [RouterOutlet, RouterLink, CommonModule, LoginComponent],
   templateUrl: './layout.component.html',
-  styleUrl: './layout.component.scss'
+  styleUrl: './layout.component.scss',
 })
 export class LayoutComponent {
   isLoggedIn = false;
@@ -28,7 +28,7 @@ export class LayoutComponent {
 
   async ngOnInit() {
 
-      this.authSub = this.supabaseService.currentUser$
+    this.authSub = this.supabaseService.currentUser$
       .subscribe(user => {
         if (user) {
           // Usuario logueado (incluye carga inicial y revalidación de sesión)
@@ -48,7 +48,7 @@ export class LayoutComponent {
           this.id = '';
           this.usuario = {};
         }
-      });   
+      });
   }
 
   // Creamos un método separado para obtener la data del perfil

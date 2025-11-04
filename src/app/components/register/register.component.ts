@@ -9,6 +9,7 @@ import { dniValidator } from '../../validators/dni.validator';
 import { passwordMatchValidator } from '../../validators/password-match.validator';
 import { UploadService } from '../../services/upload.service';
 import { AppointmentService } from '../../services/appointment.service';
+import { RecaptchaModule, RECAPTCHA_SETTINGS, RecaptchaSettings } from 'ng-recaptcha';
 
 @Component({
   selector: 'app-register',
@@ -28,6 +29,8 @@ export class RegisterComponent {
   selectedFiles: { photo?: File; photo2?: File } = {};
   path: string = '';
   pathDos: string = '';
+  public isSubmitted: boolean = false;
+  public captchaToken: string | null = null;
 
   constructor(
     private fb: FormBuilder,
@@ -105,6 +108,16 @@ export class RegisterComponent {
   soloNumeros(event: KeyboardEvent) {
     if (!/[0-9]/.test(event.key)) {
       event.preventDefault();
+    }
+  }
+
+  resolved(token: string | null) {
+    this.captchaToken = token;
+    console.log(`Token reCAPTCHA: ${token}`);
+    
+    // Opcional: Si estás usando el modo invisible, puedes enviar el formulario aquí
+    if (this.isSubmitted && token) {
+      this.onSubmit();
     }
   }
 

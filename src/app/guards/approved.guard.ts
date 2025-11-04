@@ -57,14 +57,7 @@ export const approvedGuard: CanActivateFn = async (route, state) => {
 
   if (role === 'Paciente') {
     // 🏥 Rol 'paciente': debe tener el mail confirmado (status = 'confirmed')
-    if (status === 'confirmed') {
       return true;
-    } else {
-      messages.wrongStatus('Usuario sin confirmar mail');
-      // Redirigir a una página de 'correo no confirmado' si lo deseas, 
-      // o simplemente bloquear el acceso a rutas que no sean el home.
-      return false; 
-    }
   } 
   
   else if (role === 'Especialista') {

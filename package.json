@@ -21,6 +21,7 @@
     "@supabase/supabase-js": "^2.74.0",
     "bootstrap": "^5.3.8",
     "jspdf": "^3.0.3",
+    "ng-recaptcha": "^13.2.1",
     "rxjs": "~7.8.0",
     "sweetalert2": "^11.24.0",
     "toastify-js": "^1.12.0",

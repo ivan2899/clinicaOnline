@@ -16,7 +16,7 @@ export class SpecialistComponent {
   constructor(private router: Router, private appointmentService: AppointmentService) { }
 
   async ngOnInit() {
-    const res = await this.appointmentService.getSpecialistWithSpeciality('Dentista');
+    const res = await this.appointmentService.getSpecialist();
 
     if (res && res.data) {
       this.especialistas = res.data.map((e: any) => ({

@@ -12,16 +12,16 @@ export const routes: Routes = [
     { path: '', redirectTo: '/home', pathMatch: "full" },
     {
         path: 'login',
-        loadComponent: () => import('./components/login/login.component').then(c => LoginComponent)
+        loadComponent: () => import('./components/login/login.component').then(c => LoginComponent), data: { animation: 'LoginPage' }
     },
     {
         path: 'home',
-        loadComponent: () => import('./components/home/home.component').then(c => HomeComponent),
+        loadComponent: () => import('./components/home/home.component').then(c => HomeComponent),data: { animation: 'HomePage' },
         canActivate: [approvedGuard]
     },
     {
         path: 'register',
-        loadComponent: () => import('./components/register/register.component').then(c => RegisterComponent)
+        loadComponent: () => import('./components/register/register.component').then(c => RegisterComponent), data: { animation: 'RegisterPage' }
     },
     {
         path: 'about-me',
@@ -29,7 +29,7 @@ export const routes: Routes = [
     },
     {
         path: 'profile',
-        loadComponent: () => import('./components/profile/profile.component').then(c => ProfileComponent),
+        loadComponent: () => import('./components/profile/profile.component').then(c => ProfileComponent), data: { animation: 'ProfilePage' },
         canActivate: [approvedGuard]
     },
     {

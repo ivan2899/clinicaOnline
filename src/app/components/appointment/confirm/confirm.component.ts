@@ -1,6 +1,7 @@
 import { Component } from '@angular/core';
 import { Router } from '@angular/router';
 import { AppointmentService } from '../../../services/appointment.service';
+import { ToastService } from '../../../services/toast.service';
 
 @Component({
   selector: 'app-confirm',
@@ -10,14 +11,14 @@ import { AppointmentService } from '../../../services/appointment.service';
 })
 export class ConfirmComponent {
   turno: any = {};
+  hora: string = '';
 
-  constructor(private router: Router, private appointmentService: AppointmentService) { }
+  constructor(private router: Router, private appointmentService: AppointmentService, private toastService: ToastService) { }
 
   ngOnInit() {
     const especialidad = localStorage.getItem('especialidad');
     const especialista = localStorage.getItem('especialista');
     const dia = localStorage.getItem('dia');
-    const hora = localStorage.getItem('hora');
     const especialistaId = localStorage.getItem('especialistaId');
     const usuarioId = localStorage.getItem('usuarioId');
 
@@ -25,15 +26,19 @@ export class ConfirmComponent {
       especialidad,
       especialista,
       dia: dia ? JSON.parse(dia) : null,
-      hora,
       especialistaId,
       usuarioId
     };
   }
 
   confirmarTurno() {
-    this.appointmentService.pushAppointment(this.turno.especialistaId, this.turno.usuarioId, this.turno.especialidad, this.turno.dia, this.turno.hora);
-    alert(`✅ Turno confirmado con ${this.turno.especialista} el ${this.turno.dia} a las ${this.turno.hora}`);
+
+    const dia = this.turno.dia.split(' ')[0];
+    const hora = this.turno.dia.split(' ')[1];
+
+    this.appointmentService.pushAppointment(this.turno.especialistaId, this.turno.usuarioId, this.turno.especialidad, dia, hora);
+    this.toastService.toast(`✅ Turno confirmado con ${this.turno.especialista} el ${this.turno.dia}`)
+
     localStorage.clear();
     this.router.navigate(['/home']);
   }

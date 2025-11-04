@@ -57,3 +57,19 @@
   background-color: #20c997;
   transform: scale(1.1);
 }
+
+button {
+  background-color: #20c997;
+  border: none;
+  border-radius: 8px;
+  padding: 8px;
+  color: white;
+  font-weight: bold;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+button:hover {
+  background-color: #17a589;
+  transform: scale(1.05);
+}

@@ -2,13 +2,10 @@ import { Component, SimpleChanges } from '@angular/core';
 import { Router, RouterLink, RouterOutlet } from '@angular/router';
 import { CommonModule } from '@angular/common';
 import { SupabaseService } from '../../services/supabase.service';
-import { MessagesService } from '../../services/messages.service';
-import Toastify from 'toastify-js'
 import { SpinnerService } from '../../services/spinner.service';
 import { FormsModule } from '@angular/forms';
 import { Subscription } from 'rxjs';
 import { User } from '@supabase/supabase-js';
-
 
 @Component({
   selector: 'app-home',
@@ -79,30 +76,6 @@ export class HomeComponent {
       // 3. Ocultar el spinner SOLO después de que toda la data haya sido cargada
       this.spinnerService.hide();
     }
-  }
-
-  toast() {
-    Toastify({
-      text: "This is a toast",
-      duration: 3000,
-      newWindow: true,
-      close: true,
-      gravity: "top", // `top` or `bottom`
-      position: "left", // `left`, `center` or `right`
-      stopOnFocus: true, // Prevents dismissing of toast on hover
-      style: {
-        background: "linear-gradient(to right, #00b09b, #96c93d)",
-        color: "#000"
-      },
-      onClick: function () { } // Callback after click
-    }).showToast();
-  }
-
-  spinner() {
-    this.spinnerService.show();
-    setTimeout(() => {
-      this.spinnerService.hide();
-    }, 2000);
   }
 
   ngOnDestroy(): void {

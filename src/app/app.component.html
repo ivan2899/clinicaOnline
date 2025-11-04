@@ -1,4 +1,6 @@
 <app-layout>
-<app-spinner></app-spinner>
-  <router-outlet />
+  <app-spinner></app-spinner>
+  <div [@routeAnimations]="getRouteAnimationData(outlet)">
+    <router-outlet #outlet="outlet"></router-outlet>
+  </div>
 </app-layout>

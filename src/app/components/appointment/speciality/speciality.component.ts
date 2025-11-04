@@ -13,19 +13,25 @@ import { AppointmentService } from '../../../services/appointment.service';
 export class SpecialityComponent {
   especialidades?: any;
   id: string = ''
+  especialistaId: string | null = '';
 
   constructor(private router: Router, private appointmentService: AppointmentService, private supabaseService: SupabaseService) {
 
   }
 
   async ngOnInit() {
-    const res = await this.appointmentService.getSpecialitys();
-    if (res && res.data) {
-      this.especialidades = res.data.map((e: any) => ({
-        nombre: e.speciality,
-        imagen: e.img_url
-      }));
+    this.especialistaId = localStorage.getItem('especialistaId');
+
+    if (this.especialistaId != null) {
+      const res = await this.appointmentService.getSpecialityWithSpecialist(this.especialistaId);
+      if (res && res.data) {
+        this.especialidades = res.data.map((e: any) => ({
+          nombre: e.speciality,
+          imagen: e.img_url
+        }));
+      }
     }
+
   }
 
   async seleccionarEspecialidad(nombre: string) {
@@ -48,7 +54,7 @@ export class SpecialityComponent {
     this.router.navigate(['appointment/request-appointment-day']);
   }
 
-    volver() {
+  volver() {
     this.router.navigate(['appointment/request-appointment-specialist']);
   }
 }
