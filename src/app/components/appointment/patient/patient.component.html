@@ -1,0 +1,11 @@
+<div class="container">
+  <div class="card">
+    <button class="back" (click)="volver()">⟵</button>
+    <h2>Seleccionar paciente</h2>
+
+    <div class="especialista" *ngFor="let pac of pacientes" (click)="seleccionarPaciente(pac)">
+      <img [src]="pac.foto | defaultSpecialist" alt="{{pac.nombre}}"> 
+      <p>{{ pac.nombreCompleto }}</p>
+    </div>
+  </div>
+</div>

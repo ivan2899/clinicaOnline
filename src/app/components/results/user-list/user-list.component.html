@@ -1,0 +1,94 @@
+<div class="back" [routerLink]="'/home'">
+  <img
+    src="https://fuwqovndluczbpnnywse.supabase.co/storage/v1/object/public/images/fondo/back.png"
+    alt=""
+    class="imgBack"
+  />
+</div>
+
+<!-- Loading -->
+<div *ngIf="loading" class="loading">Cargando usuarios...</div>
+
+<!-- Sin resultados -->
+<div *ngIf="!loading && users.length === 0" class="no-results">
+  No hay usuarios registrados.
+</div>
+
+<!-- Tabla de usuarios -->
+<table *ngIf="!loading && users.length > 0" class="fancy-table">
+  <thead>
+    <tr>
+      <th>Foto</th>
+      <th>Nombre</th>
+      <th>Email</th>
+      <th>Edad</th>
+      <th>DNI</th>
+      <th>Rol</th>
+      <th>Activo</th>
+      <th>Estado</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr *ngFor="let user of paginatedUsers">
+      <td>
+        <img
+          [src]="(user.first_photo_url || '') | defaultSpecialist"
+          alt="Foto"
+          class="user-photo"
+        />
+      </td>
+      <td>{{ user.first_name }} {{ user.last_name }}</td>
+      <td>{{ user.email }}</td>
+      <td>{{ user.age }}</td>
+      <td>{{ user.dni }}</td>
+      <td>{{ user.role }}</td>
+
+      <td>
+        <span class="status" [class.active]="user.is_active" [class.inactive]="!user.is_active">
+          {{ user.is_active ? 'Activo' : 'Inactivo' }}
+        </span>
+      </td>
+
+      <td>
+        <span
+          class="status"
+          [ngClass]="{
+            accepted: user.status === 'approved',
+            pending: user.status === 'pending',
+            rejected: user.status === 'rejected',
+            default: user.role !== 'Especialista'
+          }"
+        >
+          {{
+            user.status === 'approved'
+              ? 'Aceptado'
+              : user.status === 'pending'
+              ? 'Pendiente'
+              : user.status === 'rejected'
+              ? 'Rechazado'
+              : '-'
+          }}
+        </span>
+      </td>
+    </tr>
+  </tbody>
+</table>
+
+<!-- Paginación -->
+<div class="pagination" *ngIf="totalPages > 1">
+  <button (click)="goToPage(currentPage - 1)" [disabled]="currentPage === 1">&lt;</button>
+
+  <button
+    *ngFor="let page of [].constructor(totalPages); let i = index"
+    (click)="goToPage(i + 1)"
+    [class.active]="currentPage === i + 1"
+  >
+    {{ i + 1 }}
+  </button>
+
+  <button (click)="goToPage(currentPage + 1)" [disabled]="currentPage === totalPages">&gt;</button>
+</div>
+
+<div class="esp">
+  <button class="btn" routerLink="/specialist-list">Especialistas</button>
+</div>

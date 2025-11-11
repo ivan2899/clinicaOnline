@@ -1,0 +1,145 @@
+.fancy-table {
+  width: 100%;
+  border-collapse: collapse;
+  font-family: Arial, sans-serif;
+  margin: 20px 0;
+  margin-top: 200px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+  color: #333;
+}
+
+.fancy-table thead {
+  background-color: #4CAF50;
+  color: white;
+}
+
+.fancy-table th,
+.fancy-table td {
+  padding: 12px 15px;
+  border: 1px solid #ddd;
+  text-align: left;
+}
+
+.fancy-table tbody tr:nth-child(even) {
+  background-color: #f2f2f2;
+}
+
+.fancy-table tbody tr:nth-child(odd) {
+  background-color: #e0e0e0;
+}
+
+.fancy-table tbody tr:hover {
+  background-color: #c8e6c9;
+}
+
+.status {
+  padding: 2px 6px;
+  border-radius: 4px;
+  color: white;
+  font-weight: bold;
+  text-align: center;
+}
+
+.status.active {
+  background-color: #4CAF50;
+}
+
+.status.inactive {
+  background-color: #9E9E9E;
+}
+
+.status.confirmed {
+  background-color: #2196F3;
+}
+
+.status.not-confirmed {
+  background-color: #FF9800;
+}
+
+.pagination {
+  margin-top: 20px;
+  display: flex;
+  justify-content: center;
+  gap: 5px;
+}
+
+.pagination button {
+  padding: 6px 12px;
+  border: 1px solid #4CAF50;
+  background-color: white;
+  color: #4CAF50;
+  cursor: pointer;
+  border-radius: 4px;
+  font-weight: bold;
+}
+
+.pagination button.active {
+  background-color: #4CAF50;
+  color: white;
+}
+
+.pagination button:disabled {
+  opacity: 0.5;
+  cursor: default;
+}
+
+.loading,
+.no-results {
+  text-align: center;
+  margin: 20px 0;
+  margin-top: 150px;
+  font-size: 1.2em;
+}
+
+.back {
+  position: absolute;
+  top: 75px;
+  left: 10px;
+}
+
+.imgBack {
+  width: 70px;
+  cursor: pointer;
+}
+
+.status.confirmed {
+  color: green;
+  font-weight: bold;
+}
+
+.status.rejected {
+  color: red;
+  font-weight: bold;
+}
+
+.status.pending {
+  color: gray;
+  font-weight: bold;
+}
+
+.filtros {
+  display: flex;
+  gap: 10px;
+  /* espacio entre los botones */
+  justify-content: flex-start;
+  /* alineados a la izquierda */
+  margin: 10px 0;
+  /* separación arriba y abajo */
+
+  .btn {
+    padding: 8px 16px;
+    background-color: #4CAF50;
+    /* verde */
+    color: white;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    font-weight: bold;
+    transition: background-color 0.3s;
+  }
+
+  .btn:hover {
+    background-color: #17a589;
+    transform: scale(1.05);
+  }
+}

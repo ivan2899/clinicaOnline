@@ -4,6 +4,7 @@ import { SpecialityComponent } from '../../components/appointment/speciality/spe
 import { SpecialistComponent } from '../../components/appointment/specialist/specialist.component';
 import { DayComponent } from '../../components/appointment/day/day.component';
 import { ConfirmComponent } from '../../components/appointment/confirm/confirm.component';
+import { PatientComponent } from '../../components/appointment/patient/patient.component';
 
 const routes: Routes = [
   {
@@ -17,6 +18,9 @@ const routes: Routes = [
   },
   {
     path: 'request-appointment-confirm', component: ConfirmComponent
+  },
+  {
+    path: 'request-appointment-patient', component: PatientComponent
   }
 ];
 

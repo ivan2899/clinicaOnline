@@ -1,7 +1,7 @@
 <div class="perfil-container">
   <div class="perfil-card">
     <img
-      [src]="usuario?.first_photo_url || 'https://fuwqovndluczbpnnywse.supabase.co/storage/v1/object/public/images/clients/default/iconUser.png'"
+      [src]="usuario?.first_photo_url | defaultAdmin"
       alt="Foto de perfil" class="perfil-img" />
 
     <h3 class="text-center">{{ usuario?.role }}</h3>

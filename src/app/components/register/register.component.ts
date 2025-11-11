@@ -32,14 +32,15 @@ export class RegisterComponent {
   public isSubmitted: boolean = false;
   public captchaToken: string | null = null;
 
+
   constructor(
     private fb: FormBuilder,
     private router: Router,
     private supabaseService: SupabaseService,
     private messagesService: MessagesService,
     private uploadService: UploadService,
-    private appointmentService : AppointmentService
-  ) { }
+    private appointmentService: AppointmentService
+  ) {  }
 
   async ngOnInit() {
     this.initForm();
@@ -114,7 +115,7 @@ export class RegisterComponent {
   resolved(token: string | null) {
     this.captchaToken = token;
     console.log(`Token reCAPTCHA: ${token}`);
-    
+
     // Opcional: Si estás usando el modo invisible, puedes enviar el formulario aquí
     if (this.isSubmitted && token) {
       this.onSubmit();

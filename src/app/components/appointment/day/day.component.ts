@@ -81,7 +81,13 @@ export class DayComponent {
 
   seleccionarDia(dia: any) {
     localStorage.setItem('dia', JSON.stringify(dia));
-    this.router.navigate(['appointment/request-appointment-confirm']);
+
+    const rol = localStorage.getItem('rol');
+    if (rol === 'Admin') {
+      this.router.navigate(['appointment/request-appointment-patient']);
+    }else{
+      this.router.navigate(['appointment/request-appointment-confirm']);
+    }
   }
 
   volver() {

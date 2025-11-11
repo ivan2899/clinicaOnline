@@ -12,6 +12,7 @@ import { ToastService } from '../../../services/toast.service';
 export class ConfirmComponent {
   turno: any = {};
   hora: string = '';
+  rol: string | null = '';
 
   constructor(private router: Router, private appointmentService: AppointmentService, private toastService: ToastService) { }
 
@@ -21,14 +22,26 @@ export class ConfirmComponent {
     const dia = localStorage.getItem('dia');
     const especialistaId = localStorage.getItem('especialistaId');
     const usuarioId = localStorage.getItem('usuarioId');
-
-    this.turno = {
-      especialidad,
-      especialista,
-      dia: dia ? JSON.parse(dia) : null,
-      especialistaId,
-      usuarioId
-    };
+    const nombreDeUsuario = localStorage.getItem('usuarioCompleto');
+    this.rol = localStorage.getItem('rol');
+    if (this.rol == 'Admin') {
+      this.turno = {
+        especialidad,
+        especialista,
+        dia: dia ? JSON.parse(dia) : null,
+        especialistaId,
+        usuarioId,
+        nombreDeUsuario,
+      };
+    } else {
+      this.turno = {
+        especialidad,
+        especialista,
+        dia: dia ? JSON.parse(dia) : null,
+        especialistaId,
+        usuarioId
+      };
+    }
   }
 
   confirmarTurno() {

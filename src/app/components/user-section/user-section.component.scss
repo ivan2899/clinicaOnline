@@ -1,0 +1,40 @@
+.game-card {
+  background-color: gray;
+  backdrop-filter: blur(20px);
+  border-radius: 50px;
+  overflow: hidden;
+  border: none;
+  box-shadow: 0px 8px 20px rgba(0, 0, 0, 0.6);
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+  cursor: pointer;
+  color: #ddd;
+  height: 100%;
+}
+
+.cards{
+  margin-top: 140px;
+}
+
+.game-card:hover {
+  transform: translateY(-5px);
+  box-shadow: 0px 12px 25px rgba(0, 0, 0, 0.8);
+}
+
+.game-card .card-img-top {
+  height: 250px;
+  object-fit:contain;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: 15px;
+}
+
+.game-card .card-title {
+  font-size: 1.2rem;
+  font-weight: bold;
+  color: #f6d26c;
+  margin-bottom: 10px;
+}
+
+.game-card .card-text {
+  font-size: 0.95rem;
+  color: #ddd;
+}

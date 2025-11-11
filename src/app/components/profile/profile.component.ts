@@ -4,11 +4,12 @@ import { CommonModule } from '@angular/common';
 import { SpinnerService } from '../../services/spinner.service';
 import { FormsModule } from '@angular/forms';
 import { Subscription } from 'rxjs';
+import { AppointmentModule } from '../../modules/appointment/appointment.module';
 
 @Component({
   selector: 'app-profile',
   standalone: true,
-  imports: [CommonModule, FormsModule],
+  imports: [CommonModule, FormsModule, AppointmentModule],
   templateUrl: './profile.component.html',
   styleUrl: './profile.component.scss'
 })

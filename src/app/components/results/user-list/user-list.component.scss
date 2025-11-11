@@ -1,0 +1,143 @@
+.fancy-table {
+  width: 100%;
+  border-collapse: collapse;
+  background: none;
+  backdrop-filter: blur(40px);
+  font-family: Arial, sans-serif;
+  margin: 20px 0;
+  margin-top: 80px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+  color: white;
+}
+
+.fancy-table thead {
+  background-color: #4caf50;
+  color: white;
+}
+
+.fancy-table th,
+.fancy-table td {
+  padding: 12px 15px;
+  border: 1px solid #ddd;
+  text-align: center;
+}
+
+.fancy-table tbody tr:nth-child(even) {
+  background-color: #a8a8a8;
+}
+
+.fancy-table tbody tr:nth-child(odd) {
+  background-color: #696969;
+}
+
+.fancy-table tbody tr:hover {
+  background-color: #4caf50;
+  color: white;
+}
+
+.user-photo {
+  width: 50px;
+  height: 50px;
+  border-radius: 50%;
+  object-fit: cover;
+}
+
+.status {
+  font-weight: bold;
+  padding: 4px 8px;
+  border-radius: 6px;
+}
+
+.status.active {
+  color: #00e676;
+}
+
+.status.inactive {
+  color: #d3d3d3;
+}
+
+.status.accepted {
+  color: #49e097;
+}
+
+.status.pending {
+  color: #b0b0b0;
+}
+
+.status.rejected {
+  color: #ff5252;
+}
+
+.status.default {
+  color: #000000;
+}
+
+.pagination {
+  margin-top: 20px;
+  display: flex;
+  justify-content: center;
+  gap: 5px;
+}
+
+.pagination button {
+  padding: 6px 12px;
+  border: 1px solid #4caf50;
+  background-color: white;
+  color: #4caf50;
+  cursor: pointer;
+  border-radius: 4px;
+  font-weight: bold;
+}
+
+.pagination button.active {
+  background-color: #4caf50;
+  color: white;
+}
+
+.pagination button:disabled {
+  opacity: 0.5;
+  cursor: default;
+}
+
+.loading,
+.no-results {
+  text-align: center;
+  margin-top: 20px;
+  font-size: 18px;
+  color: white;
+}
+
+.back {
+  position: absolute;
+  top: 75px;
+  left: 10px;
+}
+
+.imgBack {
+  width: 70px;
+  cursor: pointer;
+}
+
+.esp {
+  display: flex;
+  justify-content: center;
+}
+
+.btn {
+  background-color: #20c997;
+  border: none;
+  border-radius: 8px;
+  padding: 8px;
+  color: white;
+  font-weight: bold;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  position: absolute;
+  bottom: 30px;
+  width: 150px;
+}
+
+.btn:hover {
+  background-color: #17a589;
+  transform: scale(1.05);
+}

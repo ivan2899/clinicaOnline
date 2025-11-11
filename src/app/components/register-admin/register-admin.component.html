@@ -1,0 +1,92 @@
+<div class="container">
+    <div class="wrapper">
+        <form [formGroup]="registerForm" (ngSubmit)="onSubmit()">
+            <h1>Registrarse como Admin</h1>
+            <div class="input-box">
+                <input type="text" formControlName="firstName" placeholder="Nombre">
+                <i class='bx bxs-user'></i>
+                <div class="error"
+                    *ngIf="registerForm.get('firstName')?.touched && registerForm.get('firstName')?.errors">
+                    <small *ngIf="registerForm.get('firstName')?.hasError('required')">El nombre es
+                        obligatorio.</small>
+                    <small *ngIf="registerForm.get('firstName')?.hasError('minlength')">El nombre debe tener al
+                        menos 3
+                        letras.</small>
+                </div>
+            </div>
+
+            <div class="input-box">
+                <input type="text" formControlName="lastName" placeholder="Apellido">
+                <i class='bx bxs-user'></i>
+                <div class="error"
+                    *ngIf="registerForm.get('lastName')?.touched && registerForm.get('lastName')?.errors">
+                    <small *ngIf="registerForm.get('lastName')?.hasError('required')">El apellido es
+                        obligatorio.</small>
+                    <small *ngIf="registerForm.get('lastName')?.hasError('minlength')">El apellido debe tener al
+                        menos 2
+                        letras.</small>
+                </div>
+            </div>
+
+            <div class="input-box">
+                <input type="number" formControlName="age" placeholder="Edad" (keypress)="soloNumeros($event)">
+                <i class='bx bxs-cake'></i>
+                <div class="error" *ngIf="registerForm.get('age')?.touched && registerForm.get('age')?.errors">
+                    <small *ngIf="registerForm.get('age')?.hasError('required')">La edad es obligatoria.</small>
+                    <small *ngIf="registerForm.get('age')?.hasError('min')">Debe ser mayor de 16 años.</small>
+                    <small *ngIf="registerForm.get('age')?.hasError('max')">Debe ser menor de 120 años.</small>
+                </div>
+            </div>
+
+            <div class="input-box">
+                <input type="number" formControlName="dni" placeholder="DNI" (keypress)="soloNumeros($event)">
+                <i class='bx bxs-id-card'></i>
+                <div class="error" *ngIf="registerForm.get('dni')?.touched && registerForm.get('dni')?.errors">
+                    <small *ngIf="registerForm.get('dni')?.hasError('required')">El DNI es obligatorio.</small>
+                    <small *ngIf="registerForm.get('dni')?.hasError('pattern')">El DNI debe tener 8 dígitos.</small>
+                </div>
+            </div>
+
+            <div class="input-box">
+                <input type="email" formControlName="email" placeholder="Email">
+                <i class='bx bxs-envelope'></i>
+                <div class="error" *ngIf="registerForm.get('email')?.touched && registerForm.get('email')?.errors">
+                    <small *ngIf="registerForm.get('email')?.hasError('required')">El email es obligatorio.</small>
+                    <small *ngIf="registerForm.get('email')?.hasError('email')">Ingrese un email válido.</small>
+                </div>
+            </div>
+
+            <div class="input-box">
+                <input type="password" formControlName="password" placeholder="Clave">
+                <i class='bx bxs-lock-alt'></i>
+                <div class="error"
+                    *ngIf="registerForm.get('password')?.touched && registerForm.get('password')?.errors">
+                    <small *ngIf="registerForm.get('password')?.hasError('required')">La clave es
+                        obligatoria.</small>
+                    <small *ngIf="registerForm.get('password')?.hasError('minlength')">La clave debe tener al menos
+                        6
+                        caracteres.</small>
+                </div>
+            </div>
+
+            <div class="input-box">
+                <input type="password" formControlName="confirmPassword" placeholder="Confirmar clave">
+                <i class='bx bxs-lock-alt'></i>
+                <div class="error"
+                    *ngIf="registerForm.get('confirmPassword')?.touched && registerForm.get('confirmPassword')?.errors">
+                    <small *ngIf="registerForm.get('confirmPassword')?.hasError('required')">Debe confirmar su
+                        clave.</small>
+                    <small *ngIf="registerForm.hasError('passwordMismatch')">Las claves no coinciden.</small>
+                </div>
+            </div>
+
+            <div class="input-box file">
+                <input type="file" id="photo" formControlName="photo" (change)="onFileSelected($event, 'photo')">
+                <label for="photo" id="fileLabel">Seleccionar imagen de perfil</label>
+                <i class='bx bxs-image'></i>
+            </div>
+
+            <button class="btn" type="submit" [disabled]="registerForm.invalid">Registrar</button>
+        </form>
+    </div>
+</div>

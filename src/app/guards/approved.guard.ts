@@ -20,7 +20,7 @@ export const approvedGuard: CanActivateFn = async (route, state) => {
   if (userError) {
     console.error('Error al obtener la sesión:', userError);
     // Si hay un error, lo tratamos como "no logueado" para permitir la entrada al home
-    return true; 
+    return true;
   }
 
   // A. Caso 1: Usuario NO logueado
@@ -57,24 +57,30 @@ export const approvedGuard: CanActivateFn = async (route, state) => {
 
   if (role === 'Paciente') {
     // 🏥 Rol 'paciente': debe tener el mail confirmado (status = 'confirmed')
-      return true;
-  } 
-  
+    return true;
+  }
+
   else if (role === 'Especialista') {
     // 👨‍⚕️ Rol 'especialista': debe tener el status 'approved'
     if (status === 'approved') {
       return true;
-    } else {
+    }
+    else if (status === 'rejected') {
+      messages.wrongStatus('No puedes ingresar, un admin te ha rechazado, contacta con soporte para mayor información'); // Mostrar mensaje de 'status incorrecto/pendiente'
+      await supabase.signOut();
+      return false;
+    }
+    else {
       messages.wrongStatus('No puedes ingresar, aún no has sido aprobado por un admin.'); // Mostrar mensaje de 'status incorrecto/pendiente'
       await supabase.signOut();
-      return false; 
+      return false;
     }
-  } 
+  }
 
-  else if (role === 'Admin'){
+  else if (role === 'Admin') {
     return true;
   }
-  
+
   else {
     // 🚫 Otros roles o rol no definido (por seguridad, bloqueamos)
     messages.wrongRole(`Rol no autorizado: ${role}`);

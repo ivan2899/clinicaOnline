@@ -47,11 +47,26 @@ export class SpecialityComponent {
       console.warn('No hay usuario logueado');
       return;
     }
-
     this.id = authData.user.id;
+    this.asignarRol(this.id);
+    const rol = localStorage.getItem('rol');
+    if (rol != 'Admin') {
+      localStorage.setItem('usuarioId', this.id);
+    }
     localStorage.setItem('especialidad', nombre);
-    localStorage.setItem('usuarioId', this.id);
     this.router.navigate(['appointment/request-appointment-day']);
+  }
+
+  private async asignarRol(id: string) {
+
+    // 1️⃣ Traer usuario autenticado
+    const { data: authData, error: authError } = await this.supabaseService.getRole(id);
+
+    if (authError) {
+      console.error('Error obteniendo usuario:', authError.message);
+      return;
+    }
+    localStorage.setItem('rol', authData.role);
   }
 
   volver() {

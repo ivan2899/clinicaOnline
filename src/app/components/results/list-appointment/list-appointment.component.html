@@ -1,0 +1,68 @@
+<div class="back" [routerLink]="'/home'">
+  <img src="https://fuwqovndluczbpnnywse.supabase.co/storage/v1/object/public/images/fondo/back.png" alt=""
+    class="imgBack" />
+</div>
+
+<!-- Loading -->
+<div *ngIf="loading" class="loading">Cargando turnos...</div>
+
+<!-- Sin resultados -->
+<div *ngIf="!loading && turns.length === 0" class="no-results">
+  No hay turnos registrados.
+</div>
+
+<!-- Tabla de turnos -->
+<table *ngIf="!loading && turns.length > 0" class="fancy-table">
+  <thead>
+    <tr>
+      <th>Especialista</th>
+      <th>Paciente</th>
+      <th>Especialidad</th>
+      <th>Día</th>
+      <th>Hora</th>
+      <th>Activo</th>
+      <th>Confirmado</th>
+      <th>Creación</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr *ngFor="let turn of paginatedTurns">
+      <td>{{ turn.specialist_name }}</td>
+      <td>{{ turn.user_name }}</td>
+      <td>{{ turn.speciality }}</td>
+      <td>{{ turn.day }}</td>
+      <td>{{ turn.time }}</td>
+      <td>
+        <span class="status" [class.active]="turn.is_active" [class.inactive]="!turn.is_active">
+          {{ turn.is_active ? 'Activo' : 'Inactivo' }}
+        </span>
+      </td>
+      <td>
+        <span class="status" [ngClass]="{
+      confirmed: turn.is_confirm === true,
+      rejected: turn.is_confirm === false,
+      pending: turn.is_confirm !== true && turn.is_confirm !== false
+    }">
+          {{
+          turn.is_confirm === true ? 'Confirmado' :
+          turn.is_confirm === false ? 'Rechazado' :
+          'Pendiente'
+          }}
+        </span>
+      </td>
+      <td>{{ formatDate(turn.created_at) }}</td>
+    </tr>
+  </tbody>
+</table>
+
+<!-- Paginación -->
+<div class="pagination" *ngIf="totalPages > 1">
+  <button (click)="goToPage(currentPage - 1)" [disabled]="currentPage === 1">&lt;</button>
+
+  <button *ngFor="let page of [].constructor(totalPages); let i = index" (click)="goToPage(i + 1)"
+    [class.active]="currentPage === i + 1">
+    {{ i + 1 }}
+  </button>
+
+  <button (click)="goToPage(currentPage + 1)" [disabled]="currentPage === totalPages">&gt;</button>
+</div>

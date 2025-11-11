@@ -4,6 +4,8 @@
 La web permite a los usuarios registrarse con diferentes tipos de perfiles, como pacientes, especialistas y administradores, ofreciendo funcionalidades específicas para cada uno.
 -----
 🌍[Sitio WEB de la clinica](https://clinicaonline-2a62f.web.app)
+
+
 ![QR](https://fuwqovndluczbpnnywse.supabase.co/storage/v1/object/public/images/readme/qr/web.png)
 -----
 

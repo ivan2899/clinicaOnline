@@ -1,0 +1,233 @@
+.fancy-table {
+  width: 100%;
+  border-collapse: collapse;
+  background: none;
+  backdrop-filter: blur(40px);
+  font-family: Arial, sans-serif;
+  margin: 20px 0;
+  margin-top: 80px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+  color: white;
+}
+
+.fancy-table thead {
+  background-color: #4caf50;
+  color: white;
+}
+
+.fancy-table th,
+.fancy-table td {
+  padding: 12px 15px;
+  border: 1px solid #ddd;
+  text-align: center;
+}
+
+.fancy-table tbody tr:nth-child(even) {
+  background-color: #a8a8a8;
+}
+
+.fancy-table tbody tr:nth-child(odd) {
+  background-color: #696969;
+}
+
+.fancy-table tbody tr:hover {
+  background-color: #789379;
+  color: white;
+}
+
+.user-photo {
+  width: 50px;
+  height: 50px;
+  border-radius: 50%;
+  object-fit: cover;
+}
+
+.status {
+  font-weight: bold;
+  padding: 4px 8px;
+  border-radius: 6px;
+}
+
+.status.active {
+  color: #00e676;
+}
+
+.status.inactive {
+  color: #d3d3d3;
+}
+
+.status.accepted {
+  color: #49e097;
+}
+
+.status.pending {
+  color: #b0b0b0;
+}
+
+.status.rejected {
+  color: #ff5252;
+}
+
+.status.default {
+  color: #000000;
+}
+
+.pagination {
+  margin-top: 20px;
+  display: flex;
+  justify-content: center;
+  gap: 5px;
+}
+
+.pagination button {
+  padding: 6px 12px;
+  border: 1px solid #4caf50;
+  background-color: white;
+  color: #4caf50;
+  cursor: pointer;
+  border-radius: 4px;
+  font-weight: bold;
+}
+
+.pagination button.active {
+  background-color: #4caf50;
+  color: white;
+}
+
+.pagination button:disabled {
+  opacity: 0.5;
+  cursor: default;
+}
+
+.loading,
+.no-results {
+  text-align: center;
+  margin-top: 300px;
+  border-radius: 30px;
+  padding: 10px;
+  font-size: 38px;
+  color: rgb(0, 0, 0);
+  background-color: #696969;
+}
+
+.back {
+  position: absolute;
+  top: 75px;
+  left: 10px;
+}
+
+.imgBack {
+  width: 70px;
+  cursor: pointer;
+}
+
+.status-container {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 4px;
+}
+
+.actions {
+  display: flex;
+  gap: 4px;
+}
+
+.actions button {
+  padding: 4px 8px;
+  font-size: 12px;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+}
+
+.actions button:nth-child(1) {
+  background-color: #4caf50; /* verde aceptar */
+  color: white;
+}
+
+.actions button:nth-child(2) {
+  background-color: #f44336; /* rojo rechazar */
+  color: white;
+}
+
+.actions button:nth-child(3) {
+  background-color: #2196f3; /* azul ver */
+  color: white;
+}
+
+/* Fondo oscuro */
+.modal-backdrop {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(0, 0, 0, 0.4);
+  z-index: 1000;
+}
+
+/* Contenedor principal */
+.modal {
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  background: #ffffff;
+  border-radius: 10px;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.3);
+  width: 400px;
+  max-width: 90%;
+  z-index: 1001;
+  animation: fadeIn 0.3s ease-in-out;
+}
+
+/* Contenido del modal */
+.modal-content {
+  padding: 20px;
+  text-align: left;
+}
+
+.modal-content h2 {
+  text-align: center;
+  margin-bottom: 15px;
+}
+
+.user-photo-large {
+  display: block;
+  margin: 0 auto 10px auto;
+  width: 100px;
+  height: 100px;
+  border-radius: 50%;
+  object-fit: cover;
+  border: 2px solid #ccc;
+}
+
+/* Botón cerrar */
+.close-btn {
+  display: block;
+  margin: 15px auto 0 auto;
+  background-color: #007bff;
+  color: white;
+  border: none;
+  border-radius: 5px;
+  padding: 8px 16px;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+}
+
+.close-btn:hover {
+  background-color: #0056b3;
+}
+
+/* Animación */
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translate(-50%, -45%);
+  }
+  to {
+    opacity: 1;
+    transform: translate(-50%, -50%);
+  }
+}

@@ -25,8 +25,6 @@ export class SpecialistComponent {
         foto: e.first_photo_url
       }));
     }
-
-    console.log(this.especialistas);
   }
 
   seleccionarEspecialista(esp: any) {

@@ -21,7 +21,7 @@ export class HomeComponent {
 
   private authSubscription: Subscription = new Subscription();
 
-  constructor(private spinnerService: SpinnerService, private supabaseService: SupabaseService) {
+  constructor(private spinnerService: SpinnerService, private supabaseService: SupabaseService, private router: Router) {
   }
 
   async ngOnInit() {
@@ -81,5 +81,16 @@ export class HomeComponent {
   ngOnDestroy(): void {
     // Importante: Limpia la suscripción para evitar pérdidas de memoria
     this.authSubscription.unsubscribe();
+  }
+
+  red(rol: string) {
+    switch (rol) {
+      case 'Admin':
+        this.router.navigateByUrl('/appointments-list')
+        break;
+      default:
+        this.router.navigateByUrl('/my-appointment')
+        break;
+    }
   }
 }

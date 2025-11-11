@@ -1,0 +1,40 @@
+<div class="row g-4 justify-content-center cards">
+        <div class="col-md-3">
+            <div class="card game-card" routerLink="/user-list">
+                <img class="card-img-top"
+                    src="https://fuwqovndluczbpnnywse.supabase.co/storage/v1/object/public/images/clients/default/userList.webp"
+                    alt="Ahorcado">
+                <div class="card-body text-center">
+                    <h5 class="card-title">Lista de usuarios</h5>
+                    <p class="card-text">Desde aquí puede acceder a cada uno de sus turnos ya solicitados.
+                    </p>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-md-3">
+            <div class="card game-card" (click)="redirigir()">
+                <img class="card-img-top"
+                    src="https://fuwqovndluczbpnnywse.supabase.co/storage/v1/object/public/images/clients/default/newUser.webp"
+                    alt="Ahorcado">
+                <div class="card-body text-center">
+                    <h5 class="card-title">Nuevo usuario</h5>
+                    <p class="card-text">Desde esta seccion se pueden ver los usuarios que forman parte de la clinica.
+                    </p>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-md-3">
+            <div class="card game-card" routerLink="/register-admin">
+                <img class="card-img-top"
+                    src="https://fuwqovndluczbpnnywse.supabase.co/storage/v1/object/public/images/clients/default/history.webp"
+                    alt="Ahorcado">
+                <div class="card-body text-center">
+                    <h5 class="card-title">Nuevo administrador</h5>
+                    <p class="card-text">Puede ingresar para ver su historial con la clínica, o con algun especialista.
+                    </p>
+                </div>
+            </div>
+        </div>
+    </div>

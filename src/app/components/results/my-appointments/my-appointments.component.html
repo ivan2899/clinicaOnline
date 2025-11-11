@@ -1,1 +1,139 @@
-<p>my-appointments works!</p>
+<div class="back" [routerLink]="'/home'">
+  <img src="https://fuwqovndluczbpnnywse.supabase.co/storage/v1/object/public/images/fondo/back.png" alt=""
+    class="imgBack" />
+</div>
+
+<!-- Loading -->
+<div *ngIf="loading" class="loading">Cargando turnos...</div>
+
+<!-- Sin resultados -->
+<div *ngIf="!loading && turns.length === 0" class="no-results">
+  No hay turnos registrados.
+</div>
+
+<!-- Tabla de turnos -->
+<table *ngIf="!loading && turns.length > 0" class="fancy-table">
+  <thead>
+    <tr>
+      <th>Especialista</th>
+      <th>Paciente</th>
+      <th>Especialidad</th>
+      <th>Día</th>
+      <th>Hora</th>
+      <th>Activo</th>
+      <th>Confirmado</th>
+      <th>Creación</th>
+      <th>Cancelar</th>
+      <th *ngIf="role == 'Especialista'">Aceptar</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr *ngFor="let turn of paginatedTurns">
+      <td>{{ turn.specialist_name }}</td>
+      <td>{{ turn.user_name }}</td>
+      <td>{{ turn.speciality }}</td>
+      <td>{{ turn.day }}</td>
+      <td>{{ turn.time }}</td>
+      <td>
+        <span class="status" [class.active]="turn.is_active" [class.inactive]="!turn.is_active">
+          {{ turn.is_active ? 'Activo' : 'Inactivo' }}
+        </span>
+      </td>
+      <td>
+        <span class="status" [ngClass]="{
+      confirmed: turn.is_confirm === true,
+      rejected: turn.is_confirm === false,
+      pending: turn.is_confirm !== true && turn.is_confirm !== false
+    }">
+          {{
+          turn.is_confirm === true ? 'Confirmado' :
+          turn.is_confirm === false ? 'Rechazado' :
+          'Pendiente'
+          }}
+        </span>
+      </td>
+      <td>{{ formatDate(turn.created_at) }}</td>
+      <td>
+        <button class="btn btn-danger" (click)="cancel(turn.id)">Cancelar turno</button>
+        <button *ngIf="role == 'Especialista'" class="btn btn-outline-danger" (click)="reject(turn.id)">Rechazar turno</button>
+      </td>
+      <td *ngIf="role == 'Especialista'">
+        <button class="btn btn-success" (click)="confirm(turn.id)">Aceptar turno</button>
+        <button class="btn btn-warning" (click)="cancel(turn.id)">Finalizar turno</button>
+      </td>
+    </tr>
+  </tbody>
+</table>
+
+<!-- Paginación -->
+<div class="pagination" *ngIf="totalPages > 1">
+  <button (click)="goToPage(currentPage - 1)" [disabled]="currentPage === 1">&lt;</button>
+
+  <button *ngFor="let page of [].constructor(totalPages); let i = index" (click)="goToPage(i + 1)"
+    [class.active]="currentPage === i + 1">
+    {{ i + 1 }}
+  </button>
+
+  <button (click)="goToPage(currentPage + 1)" [disabled]="currentPage === totalPages">&gt;</button>
+</div>
+
+<div class="filtros">
+  <button appHover class="btn" (click)="openSpecialityModal()">Filtrar por especialidad</button>
+  <button appHover *ngIf="role == 'Paciente'" class="btn" (click)="openSpecialistModal()">Filtrar por especialista</button>
+  <button appHover *ngIf="role == 'Especialista'" class="btn" (click)="openPatientModal()">Filtrar por paciente</button>
+  <button appHover class="btn" (click)="clearFilters()">Limpiar filtros</button>
+</div>
+
+<!-- Modal Especialidades -->
+<div class="modal" *ngIf="showSpecialityModal">
+  <div class="modal-content">
+    <h3>Seleccionar especialidad</h3>
+    <div class="modal-buttons">
+      <button *ngFor="let s of specialities" (click)="filterBySpeciality(s.nombre)">
+        {{ s.nombre }}
+      </button>
+    </div>
+    <button class="close-btn" (click)="closeModals()">Cerrar</button>
+  </div>
+</div>
+
+@if(role == 'Paciente')
+{
+<!-- Modal Especialistas -->
+<div class="modal" *ngIf="showSpecialistModal">
+  <div class="modal-content">
+    <h3>Seleccionar especialista</h3>
+    <div class="modal-buttons">
+      <button *ngFor="let sp of specialists" (click)="filterBySpecialist(sp.id)">
+        {{ sp.nombreCompleto }}
+      </button>
+    </div>
+    <button class="close-btn" (click)="closeModals()">Cerrar</button>
+  </div>
+</div>
+}
+@else{
+<!-- Modal Paciente -->
+<div class="modal" *ngIf="showPatientModal">
+  <div class="modal-content">
+    <h3>Seleccionar paciente</h3>
+    <div class="modal-buttons">
+      <button *ngFor="let p of patients" (click)="filterByPatient(p.id)">
+        {{ p.nombreCompleto }}
+      </button>
+    </div>
+    <button class="close-btn" (click)="closeModals()">Cerrar</button>
+  </div>
+</div>
+}
+
+<!-- Modal texto -->
+<div class="modal" *ngIf="showText">
+  <div class="modal-content">
+    <h3>Ingrese el motivo por el que no va a realizar el turno:</h3>
+    <div class="modal-buttons">
+      <textarea appUpperCase appResizable name="txt" placeholder="Escribe el motivo ..." id="txt" [(ngModel)]="text"></textarea>
+    </div>
+    <button class="btn btn-success" (click)="send()">Aceptar</button>
+  </div>
+</div>

@@ -6,7 +6,7 @@
         <button class="btn" routerLink="/login">Redirigir</button>
     </div>
 
-    <div class="row g-4 justify-content-center">
+    <div class="row g-4 justify-content-center cards">
         <div class="col-md-3" *ngIf="role == 'Paciente' || role == 'Admin'">
             <div class="card game-card" routerLink="/appointment/request-appointment-specialist">
                 <img class="card-img-top"
@@ -21,7 +21,7 @@
         </div>
 
         <div class="col-md-3" *ngIf="role == 'Paciente' || role == 'Especialista' || role == 'Admin'">
-            <div class="card game-card">
+            <div class="card game-card" (click)="red(role)">
                 <img class="card-img-top"
                     src="https://fuwqovndluczbpnnywse.supabase.co/storage/v1/object/public/images/clients/default/myAppointment.webp"
                     alt="Ahorcado">
@@ -34,9 +34,9 @@
         </div>
 
         <div class="col-md-3" *ngIf="role == 'Admin'">
-            <div class="card game-card">
+            <div class="card game-card" routerLink="/section">
                 <img class="card-img-top"
-                    src="https://wwgfysczkcuaqjmpqkxo.supabase.co/storage/v1/object/public/images/logos/logoAhorcado.png"
+                    src="https://fuwqovndluczbpnnywse.supabase.co/storage/v1/object/public/images/clients/default/newUser.webp"
                     alt="Ahorcado">
                 <div class="card-body text-center">
                     <h5 class="card-title">Seccion usuarios</h5>

@@ -3,6 +3,7 @@ import { AuthChangeEvent, createClient, RealtimeChannel, Session, SupabaseClient
 import { environment } from '../../environments/environment';
 import { BehaviorSubject, Observable } from 'rxjs';
 import { filter, map } from 'rxjs/operators';
+import { ProfileUser } from '../models/profile-user.model';
 
 @Injectable({
   providedIn: 'root'
@@ -248,5 +249,163 @@ export class SupabaseService {
     }
 
     return data;
+  }
+
+  async getUsers(): Promise<ProfileUser[]> {
+    const { data, error } = await this.supabase
+      .from('profiles')
+      .select('first_name, last_name, email, age, dni, first_photo_url, role, is_active, status')
+      .order('first_name', { ascending: true });
+
+    if (error) {
+      console.error('Error obteniendo usuarios:', error);
+      return [];
+    }
+
+    return (data ?? []) as ProfileUser[];
+  }
+
+  async getSpecialistPending(): Promise<ProfileUser[]> {
+    const { data, error } = await this.supabase
+      .from('profiles')
+      .select('first_name, last_name, email, age, dni, first_photo_url, role, is_active, status, auth_id')
+      .order('first_name', { ascending: true })
+      .eq('status', 'pending')
+
+    if (error) {
+      console.error('Error obteniendo usuarios:', error);
+      return [];
+    }
+
+    return (data ?? []) as ProfileUser[];
+  }
+
+  async changeStatus(auth_id: string, status: string) {
+    await this.supabase
+      .from('profiles')
+      .update({ status: status })
+      .eq('auth_id', auth_id)
+  }
+
+  async getAppointments() {
+    // Traemos los turnos
+    const { data: appointments, error } = await this.supabase
+      .from('appointments')
+      .select('*');
+
+    if (error) {
+      console.error('Error al obtener turnos:', error.message);
+      return [];
+    }
+
+    if (!appointments || appointments.length === 0) return [];
+
+    // Obtenemos todos los auth_id únicos de specialist y user
+    const authIds = [
+      ...new Set([
+        ...appointments.map(a => a.specialist_id),
+        ...appointments.map(a => a.user_id)
+      ])
+    ];
+
+    // Traemos los perfiles
+    const { data: profiles } = await this.supabase
+      .from('profiles')
+      .select('auth_id, first_name, last_name')
+      .in('auth_id', authIds);
+
+    // Creamos un mapa para acceder rápido a los nombres
+    const profilesMap = new Map(
+      profiles?.map(p => [p.auth_id, `${p.first_name} ${p.last_name}`]) || []
+    );
+
+    // Mapear nombres a cada appointment
+    return appointments.map(a => ({
+      ...a,
+      specialist_name: profilesMap.get(a.specialist_id) || 'Desconocido',
+      user_name: profilesMap.get(a.user_id) || 'Desconocido',
+    }));
+  }
+
+  async getAppointmentsSpecialist(id: string) {
+    // Traemos los turnos
+    const { data: appointments, error } = await this.supabase
+      .from('appointments')
+      .select('*')
+      .eq('specialist_id', id);
+
+    if (error) {
+      console.error('Error al obtener turnos:', error.message);
+      return [];
+    }
+
+    if (!appointments || appointments.length === 0) return [];
+
+    // Obtenemos todos los auth_id únicos de specialist y user
+    const authIds = [
+      ...new Set([
+        ...appointments.map(a => a.specialist_id),
+        ...appointments.map(a => a.user_id)
+      ])
+    ];
+
+    // Traemos los perfiles
+    const { data: profiles } = await this.supabase
+      .from('profiles')
+      .select('auth_id, first_name, last_name')
+      .in('auth_id', authIds);
+
+    // Creamos un mapa para acceder rápido a los nombres
+    const profilesMap = new Map(
+      profiles?.map(p => [p.auth_id, `${p.first_name} ${p.last_name}`]) || []
+    );
+
+    // Mapear nombres a cada appointment
+    return appointments.map(a => ({
+      ...a,
+      specialist_name: profilesMap.get(a.specialist_id) || 'Desconocido',
+      user_name: profilesMap.get(a.user_id) || 'Desconocido',
+    }));
+  }
+
+  async getAppointmentsPatient(id: string) {
+    // Traemos los turnos
+    const { data: appointments, error } = await this.supabase
+      .from('appointments')
+      .select('*')
+      .eq('user_id', id);
+
+    if (error) {
+      console.error('Error al obtener turnos:', error.message);
+      return [];
+    }
+
+    if (!appointments || appointments.length === 0) return [];
+
+    // Obtenemos todos los auth_id únicos de specialist y user
+    const authIds = [
+      ...new Set([
+        ...appointments.map(a => a.specialist_id),
+        ...appointments.map(a => a.user_id)
+      ])
+    ];
+
+    // Traemos los perfiles
+    const { data: profiles } = await this.supabase
+      .from('profiles')
+      .select('auth_id, first_name, last_name')
+      .in('auth_id', authIds);
+
+    // Creamos un mapa para acceder rápido a los nombres
+    const profilesMap = new Map(
+      profiles?.map(p => [p.auth_id, `${p.first_name} ${p.last_name}`]) || []
+    );
+
+    // Mapear nombres a cada appointment
+    return appointments.map(a => ({
+      ...a,
+      specialist_name: profilesMap.get(a.specialist_id) || 'Desconocido',
+      user_name: profilesMap.get(a.user_id) || 'Desconocido',
+    }));
   }
 }
