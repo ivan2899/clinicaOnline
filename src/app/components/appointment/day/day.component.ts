@@ -15,6 +15,7 @@ export class DayComponent {
   dia: string = ''
   hora: any;
   turnosGenerados: string[] = [];
+  turnos: string[] = [];
 
   constructor(private router: Router, private supabaseService: SupabaseService) {
     const id = localStorage.getItem('especialistaId');
@@ -24,16 +25,21 @@ export class DayComponent {
   async ngOnInit() {
     this.dias = await this.supabaseService.getDiasSeleccionados(this.specialistId);
     this.hora = await this.supabaseService.getQuantitySeleccionados(this.specialistId);
+    this.turnos = await this.supabaseService.getAppointments();
 
+    console.log(this.turnos);
     this.turnosGenerados = this.generarTurnos(this.dias, this.hora);
   }
 
-  generarTurnos(dias: string[], hora: { quantity: number; time_start: string }): string[] {
+  generarTurnos(
+    dias: string[],
+    hora: { quantity: number; time_start: string },
+  ): string[] {
+
     const turnos: string[] = [];
     const cantidadMax = 10;
     const minutosPorTurno = 30;
 
-    // Mapeo de días a índice (Lunes = 1, Domingo = 0)
     const diasMap: any = {
       Domingo: 0,
       Lunes: 1,
@@ -44,34 +50,51 @@ export class DayComponent {
       Sábado: 6,
     };
 
-    // Obtener la fecha actual
     let fecha = new Date();
 
     while (turnos.length < cantidadMax) {
-      const diaSemana = fecha.getDay();
 
-      // Si el día actual es uno de los que trabaja
+      const diaSemana = fecha.getDay();
       const nombreDia = Object.keys(diasMap).find(key => diasMap[key] === diaSemana);
+
       if (nombreDia && dias.includes(nombreDia)) {
-        // Crear los turnos para este día
+
         const [horaInicio, minutosInicio] = hora.time_start.split(':').map(Number);
 
         for (let i = 0; i < hora.quantity; i++) {
+
           const fechaTurno = new Date(fecha);
           fechaTurno.setHours(horaInicio);
           fechaTurno.setMinutes(minutosInicio + i * minutosPorTurno);
 
+          // Formato para mostrar: dd/mm
           const dia = fechaTurno.getDate().toString().padStart(2, '0');
           const mes = (fechaTurno.getMonth() + 1).toString().padStart(2, '0');
-          const horaStr = fechaTurno.toLocaleTimeString('es-AR', { hour: '2-digit', minute: '2-digit' });
+          const diaFormato = `${dia}/${mes}`;
 
-          turnos.push(`${dia}/${mes} ${horaStr}`);
+          // Formato de hora: "HH:mm"
+          const horaStr = fechaTurno.toLocaleTimeString('es-AR', {
+            hour: '2-digit',
+            minute: '2-digit',
+            hour12: false
+          });
+
+          // 🔎 Verificar si ese turno ya existe y está activo
+          const ocupado = this.turnos.some((t: any) =>
+            t.is_active === true &&
+            t.day === diaFormato &&
+            t.time === horaStr
+          );
+
+          if (!ocupado) {
+            // Si NO está ocupado, lo agregamos
+            turnos.push(`${diaFormato} ${horaStr}`);
+          }
 
           if (turnos.length >= cantidadMax) break;
         }
       }
 
-      // Avanzar al siguiente día
       fecha.setDate(fecha.getDate() + 1);
     }
 
@@ -85,7 +108,7 @@ export class DayComponent {
     const rol = localStorage.getItem('rol');
     if (rol === 'Admin') {
       this.router.navigate(['appointment/request-appointment-patient']);
-    }else{
+    } else {
       this.router.navigate(['appointment/request-appointment-confirm']);
     }
   }

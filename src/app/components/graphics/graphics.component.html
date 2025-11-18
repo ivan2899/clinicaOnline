@@ -1,0 +1,113 @@
+<div class="graphics-root">
+
+  <header class="header">
+    <h1>- Informes & Gráficos -</h1>
+    <p class="subtitle">Logins, turnos por especialidad / día y métricas por médico</p>
+  </header>
+
+  <nav class="pagination">
+    <button class="btn btn-outline-warning" (click)="goToPage(1)" [class.active]="currentPage === 1">Ingresos</button>
+    <button class="btn btn-outline-warning" (click)="goToPage(2)" [class.active]="currentPage === 2">Especialidad</button>
+    <button class="btn btn-outline-warning" (click)="goToPage(3)" [class.active]="currentPage === 3">Por Día</button>
+    <button class="btn btn-outline-warning" (click)="goToPage(4)" [class.active]="currentPage === 4">Solicitados</button>
+    <button class="btn btn-outline-warning" (click)="goToPage(5)" [class.active]="currentPage === 5">Finalizados</button>
+  </nav>
+
+  <div *ngIf="currentPage === 1">
+    <!-- LOG DE INGRESOS -->
+    <section class="card">
+      <div class="card-head">
+        <h2>Log de ingresos al sistema</h2>
+        <div class="card-actions">
+          <button (click)="downloadPdf('logChart')" class="btn primary">PDF</button>
+          <button (click)="downloadExcel('logChart')" class="btn">Excel</button>
+        </div>
+      </div>
+
+      <div id="logChart" class="chart" role="img" aria-label="Log de ingresos"></div>
+    </section>
+  </div>
+
+  <div *ngIf="currentPage === 2">
+    <!-- TURNOS POR ESPECIALIDAD -->
+    <section class="card">
+      <div class="card-head">
+        <h2>Turnos por especialidad</h2>
+        <div class="card-actions">
+          <button (click)="downloadPdf('perSpecialtyChart')" class="btn primary">PDF</button>
+          <button (click)="downloadExcel('perSpecialtyChart')" class="btn">Excel</button>
+        </div>
+      </div>
+
+      <div id="perSpecialtyChart" class="chart" role="img" aria-label="Turnos por especialidad"></div>
+    </section>
+  </div>
+
+  <div *ngIf="currentPage === 3">
+    <!-- TURNOS POR DÍA -->
+    <section class="card">
+      <div class="card-head">
+        <h2>Turnos por día</h2>
+        <div class="card-actions">
+          <button (click)="downloadPdf('perDayChart')" class="btn primary">PDF</button>
+          <button (click)="downloadExcel('perDayChart')" class="btn">Excel</button>
+        </div>
+      </div>
+
+      <div id="perDayChart" class="chart" role="img" aria-label="Turnos por día"></div>
+    </section>
+  </div>
+
+  <div *ngIf="currentPage === 4">
+    <!-- TURNOS SOLICITADOS POR MÉDICO (FILTRO) -->
+    <section class="card">
+      <div class="card-head">
+        <h2>Turnos solicitados por médico</h2>
+      </div>
+
+      <div class="weeks-row">
+        <h4>Seleccionar semana:</h4>
+
+        <div class="weeks-list">
+          <button *ngFor="let w of weeks; let i = index" class="week-btn" [class.active]="selectedWeek === i"
+            (click)="selectWeek(i)">
+            {{ w.label }}
+          </button>
+        </div>
+      </div>
+
+      <div class="filter-actions">
+        <button (click)="downloadPdf('requestedChart')" class="btn primary">PDF</button>
+        <button (click)="downloadExcel('requestedChart')" class="btn">Excel</button>
+      </div>
+
+      <div id="requestedChart" class="chart"></div>
+    </section>
+  </div>
+
+  <div *ngIf="currentPage === 5">
+    <!-- TURNOS FINALIZADOS POR MÉDICO (SEMANAS) -->
+    <section class="card">
+      <div class="card-head">
+        <h2>Turnos finalizados por médico</h2>
+      </div>
+
+      <div class="week-selector">
+        <button *ngFor="let w of weeks2" (click)="selectWeek2(w)" class="btn" [class.active]="selectedWeek2 === w">
+          {{ w.label }}
+        </button>
+      </div>
+
+      <div class="filter-actions">
+        <button (click)="downloadPdf('finishedChart')" class="btn primary">PDF</button>
+        <button (click)="downloadExcel('finishedChart')" class="btn">Excel</button>
+      </div>
+
+      <div id="finishedChart" class="chart" role="img" aria-label="Turnos finalizados por médico"></div>
+    </section>
+  </div>
+
+  <footer class="footer">
+    <small>Exportar: PDF &middot; Excel | Gráficos generados con Highcharts</small>
+  </footer>
+</div>

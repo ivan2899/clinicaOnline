@@ -8,6 +8,8 @@ import { ToastService } from '../../../services/toast.service';
 import { UpperCaseDirective } from '../../../directives/upper-case.directive';
 import { HoverDirective } from '../../../directives/hover.directive';
 import { ResizableDirective } from '../../../directives/resizable.directive';
+import { Appointment } from '../../../models/appointment.model';
+import { Patient } from '../../../models/patient.model';
 
 @Component({
   selector: 'app-my-appointments',
@@ -22,6 +24,17 @@ export class MyAppointmentsComponent {
   loading = true;
   role = '';
   text: string = '';
+  appo: Appointment = {
+    specialist_id: '',
+    user_id: '',
+    speciality: '',
+    day: '',
+    time: '',
+    is_confirm: false,
+    created_at: ''
+  };
+
+  opciones = [0, 1, 2, 3, 4, 5];
 
   specialities: any[] = []; // se llena con la consulta de especialidades
   specialists: any[] = []; // se llena con la consulta de especialistas
@@ -31,6 +44,12 @@ export class MyAppointmentsComponent {
   showSpecialistModal = false;
   showPatientModal = false;
   showText = false;
+  showDesc = false;
+  showMotivoModal = false;
+  showSurvey = false;
+  showAttention = false;
+  motivoText: string = '';
+  motivoTitle: string = '';
 
   filteredUsers: any[] = []; // usuarios filtrados
 
@@ -38,6 +57,20 @@ export class MyAppointmentsComponent {
   pageSize = 5;
   totalPages = 1;
 
+  patientData: Patient = {
+    altura: 0,
+    peso: 0,
+    temperatura: 0,
+    presion: '',
+    descripcion: ''
+  };
+  dynamicFields: { key: string; value: string }[] = [];
+  appoId: number = 0;
+
+  srvText: string = '';
+  srvAttention: number = 0;
+  srvClean: number = 0;
+  srvPlace: number = 0;
 
   constructor(
     private supabaseService: SupabaseService,
@@ -56,10 +89,8 @@ export class MyAppointmentsComponent {
       } else {
         this.turns = await this.supabaseService.getAppointmentsSpecialist(data?.data?.user?.id);
       }
-      console.log(this.turns);
 
       const res = await this.appointmentService.getSpecialist();
-
       if (res && res.data) {
         this.specialists = res.data.map((e: any) => ({
           id: e.auth_id,
@@ -126,10 +157,33 @@ export class MyAppointmentsComponent {
     this.showText = true;
   }
 
+  openEndModal() {
+    this.showDesc = true;
+  }
+
+  async openMotivoModal(id: number, type: string) {
+    if (type == 'end') {
+      this.motivoTitle = 'Reseña del turno';
+      const result = await this.appointmentService.getResHistory(id);
+      this.motivoText = result.data?.description || 'Sin reseña registrada.';
+    } else {
+      this.motivoTitle = 'Motivo del rechazo';
+      const result = await this.appointmentService.getDataHistory(id);
+      this.motivoText = result.data?.commentary || 'Sin motivo registrado.';
+    }
+    this.showMotivoModal = true;
+  }
+
+  closeMotivoModal() {
+    this.showMotivoModal = false;
+    this.motivoText = '';
+  }
+
   closeModals() {
     this.showSpecialityModal = false;
     this.showSpecialistModal = false;
     this.showPatientModal = false;
+    this.showDesc = false;
   }
 
   // Filtrar por especialidad
@@ -168,24 +222,100 @@ export class MyAppointmentsComponent {
     this.loadPage(this.currentPage);
   }
 
-  async cancel(id: number) {
+  async cancel(id: number, app: Appointment) {
     await this.appointmentService.changeStatus(id);
+    await this.appointmentService.changeStatusDos(id);
     this.openTextModal();
-  }
-
-  async reject(id: number) {
-    await this.appointmentService.changeConfirm(id, false);
-    this.openTextModal();
+    this.appo = app;
   }
 
   async confirm(id: number) {
     await this.appointmentService.changeConfirm(id, true);
+    this.toastService.toast('El turno fue aceptado con éxito')
   }
 
-  send() {
+  async finalize(id: number, app: Appointment) {
+    await this.appointmentService.changeStatus(id);
+    await this.appointmentService.changeStatusEnd(id);
+    this.openEndModal();
+    this.appo = app;
+    this.appoId = id;
+  }
+
+  async end() {
+    this.showDesc = false;
+    await this.appointmentService.pushHistoryEnd(this.appo, this.patientData, this.dynamicFields);
+    //await this.appointmentService.appointmentEnd(this.appoId)
+    this.toastService.toast('El turno se finalizó con éxito')
+  }
+
+  async send() {
     this.showText = false;
-    console.log(this.text);
+    this.text = `El turno fue cancelado por ${this.role}: ` + this.text
+    await this.appointmentService.pushHistoryCancel(this.appo, this.text)
     this.toastService.toast('El turno se canceló con éxito')
     this.loadPage(this.currentPage);
+  }
+
+  soloNumeros(event: KeyboardEvent) {
+    if (!/[0-9]/.test(event.key)) {
+      event.preventDefault();
+    }
+  }
+
+  soloPresion(event: KeyboardEvent) {
+    const allowed = /^[0-9\/]$/; // números o barra
+
+    if (!allowed.test(event.key)) {
+      event.preventDefault();
+    }
+  }
+
+  async survey(id: number, txt: string) {
+    if (txt == 'survey') {
+      await this.appointmentService.changeStatusSurvey(id);
+      this.appoId = id;
+      this.openSurveyModal();
+    } else {
+      await this.appointmentService.changeStatusAttention(id);
+      this.appoId = id;
+      this.openCalificacionModal();
+    }
+  }
+
+  async saveSurvey() {
+    this.toastService.toast('La encuesta fue enviada con éxito')
+    await this.appointmentService.newSurvey(this.srvText, this.appoId)
+    this.closeSurveyModal();
+  }
+
+  openSurveyModal() {
+    this.showSurvey = true;
+  }
+
+  closeSurveyModal() {
+    this.showSurvey = false;
+  }
+
+  openCalificacionModal() {
+    this.showAttention = true;
+  }
+
+  closeCalificacionModal() {
+    this.showAttention = false;
+  }
+
+  async guardarCalificacion() {
+    this.toastService.toast('La calificación fue enviada con éxito')
+    await this.appointmentService.newAttention(this.srvAttention, this.srvClean, this.srvPlace, this.appoId)
+    this.closeCalificacionModal();
+  }
+
+  addField() {
+    this.dynamicFields.push({ key: '', value: '' });
+  }
+
+  removeField(index: number) {
+    this.dynamicFields.splice(index, 1);
   }
 }

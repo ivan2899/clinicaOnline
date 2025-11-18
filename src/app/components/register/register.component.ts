@@ -9,7 +9,6 @@ import { dniValidator } from '../../validators/dni.validator';
 import { passwordMatchValidator } from '../../validators/password-match.validator';
 import { UploadService } from '../../services/upload.service';
 import { AppointmentService } from '../../services/appointment.service';
-import { RecaptchaModule, RECAPTCHA_SETTINGS, RecaptchaSettings } from 'ng-recaptcha';
 
 @Component({
   selector: 'app-register',
@@ -230,7 +229,6 @@ export class RegisterComponent {
       this.error("El usuario ya está registrado");
       return;
     }
-
 
     switch (this.role) {
       case 'paciente':

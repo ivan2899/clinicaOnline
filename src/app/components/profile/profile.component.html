@@ -1,8 +1,6 @@
 <div class="perfil-container">
   <div class="perfil-card">
-    <img
-      [src]="usuario?.first_photo_url | defaultAdmin"
-      alt="Foto de perfil" class="perfil-img" />
+    <img [src]="usuario?.first_photo_url | defaultAdmin" alt="Foto de perfil" class="perfil-img" />
 
     <h3 class="text-center">{{ usuario?.role }}</h3>
 
@@ -13,6 +11,15 @@
       </button>
       <button [class.active]="seccionActiva === 'horarios'" (click)="cambiarSeccion('horarios')">
         Mis horarios
+      </button>
+    </div>
+
+    <div class="toggle-container" *ngIf="usuario?.role === 'Paciente'; else soloInfo">
+      <button [class.active]="seccionActiva === 'info'" (click)="cambiarSeccion('info')">
+        Información
+      </button>
+      <button routerLink="/history">
+        Historia clínica
       </button>
     </div>
 
@@ -62,7 +69,8 @@
     <!-- Cantidad de turnos -->
     <div class="horarios-form">
       <label for="cantidadTurnos"><strong>Cantidad de turnos por día:</strong></label>
-      <input id="cantidadTurnos" type="number" min="1" (keypress)="soloNumeros($event)" [(ngModel)]="cantidadTurnos" placeholder="Ej: 5" />
+      <input id="cantidadTurnos" type="number" min="1" (keypress)="soloNumeros($event)" [(ngModel)]="cantidadTurnos"
+        placeholder="Ej: 5" />
 
       <button class="save" (click)="guardarHorarios()">Guardar horarios</button>
     </div>

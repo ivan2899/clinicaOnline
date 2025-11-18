@@ -1,0 +1,52 @@
+.fancy-table {
+  width: 100%;
+  border-collapse: collapse;
+  font-family: Arial, sans-serif;
+  margin: 20px 0;
+  margin-top: 200px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+  color: #333;
+}
+
+.fancy-table thead {
+  background-color: #4CAF50;
+  color: white;
+}
+
+.fancy-table th, .fancy-table td {
+  padding: 12px 15px;
+  border: 1px solid #ddd;
+  text-align: left;
+}
+
+.fancy-table tbody tr:nth-child(even) {
+  background-color: #f2f2f2;
+}
+.fancy-table tbody tr:nth-child(odd) {
+  background-color: #e0e0e0;
+}
+
+.fancy-table tbody tr:hover {
+  background-color: #c8e6c9;
+}
+
+.status.finished {
+  color: green;
+  font-weight: bold;
+}
+
+.status.pending {
+  color: orange;
+  font-weight: bold;
+}
+
+.btn {
+  padding: 5px 10px;
+  border-radius: 5px;
+  cursor: pointer;
+}
+
+.btn-info {
+  background: #3498db;
+  color: white;
+}

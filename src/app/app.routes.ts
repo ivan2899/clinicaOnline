@@ -65,6 +65,14 @@ export const routes: Routes = [
         path: 'specialist-list',
         loadComponent: () => import('./components/results/specialist/specialist.component').then(m => m.SpecialistComponent)
     },
+    {
+        path: 'history',
+        loadComponent: () => import('./components/history/history.component').then(m => m.HistoryComponent)
+    },
+    {
+        path: 'graficos',
+        loadComponent: () => import('./components/graphics/graphics.component').then(m => m.GraphicsComponent)
+    },
     { path: '**', component: PageNotFoundComponent }
 
 ];

@@ -1,8 +1,6 @@
 import { Injectable } from '@angular/core';
-import { jsPDF } from 'jspdf'; // Importa jsPDF
+import { jsPDF } from 'jspdf';
 
-// Reemplaza con tu cadena Base64 del logo "hola.png"
-// Ejemplo: const LOGO_BASE64 = 'data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAA...'; 
 let LOGO_BASE64 = 'TU_LOGO_EN_BASE64_AQUI';
 
 @Injectable({
@@ -11,103 +9,189 @@ let LOGO_BASE64 = 'TU_LOGO_EN_BASE64_AQUI';
 export class PdfService {
 
   constructor() {
-    this.novo();
+    this.loadLogo();
   }
 
-  async novo() {
-    LOGO_BASE64 = await this.getBase64ImageFromURL('https://fuwqovndluczbpnnywse.supabase.co/storage/v1/object/public/images/fondo/icon.webp');
+  private async loadLogo() {
+    LOGO_BASE64 = await this.getBase64ImageFromURL(
+      'https://fuwqovndluczbpnnywse.supabase.co/storage/v1/object/public/images/fondo/icon.webp'
+    );
   }
 
-  /**
-   * Genera y descarga un archivo PDF con logo, fecha, título y datos.
-   * @param title El título principal del informe.
-   * @param data El contenido del informe (puede ser un string o datos formateados).
-   */
-  generatePdf(title: string, data: string): void {
-    // 1. Inicializar jsPDF. 'p': portrait (vertical), 'mm': unidades en milímetros, 'a4': formato A4.
+  generatePdf(title: string, history: any[]): void {
+
     const doc = new jsPDF('p', 'mm', 'a4');
-    let yOffset = 10; // Posición inicial vertical
-
-    // --- Configuración General ---
     const MARGIN = 15;
-    const MAX_WIDTH = doc.internal.pageSize.getWidth() - 2 * MARGIN;
+    const MAX_WIDTH = doc.internal.pageSize.getWidth() - MARGIN * 2;
+    const PAGE_HEIGHT = doc.internal.pageSize.getHeight();
+    let y = 40;
 
-    // --- 1. Agregar el Logo ---
-    if (LOGO_BASE64 !== 'TU_LOGO_EN_BASE64_AQUI') {
-      const logoWidth = 30; // Ancho deseado del logo en mm
-      const logoHeight = 10; // Alto deseado del logo en mm
-      // Asegúrate de que el LOGO_BASE64 tenga el prefijo 'data:image/png;base64,'
-      doc.addImage(LOGO_BASE64, 'PNG', MARGIN, yOffset, logoWidth, logoHeight);
-      yOffset += logoHeight + 5; // Mover la posición hacia abajo
-    } else {
-      // Si no se proporciona el Base64, ajusta el offset para que el contenido comience correctamente
-      yOffset += 10;
+    // Encabezado
+    this.drawHeader(doc, title);
+
+    // 🟥 Si no hay historia, generar PDF vacío con el mensaje
+    if (!history || history.length === 0) {
+
+      doc.setFont('helvetica', 'normal');
+      doc.setFontSize(14);
+
+      const msg = "El usuario no tiene historia clínica aún";
+      doc.text(
+        msg,
+        doc.internal.pageSize.getWidth() / 2,
+        60,
+        { align: 'center' }
+      );
+
+      const d = new Date();
+      const fname = `historiaClinica_${d.getDate()}-${d.getMonth() + 1}-${d.getFullYear()}.pdf`;
+      doc.save(fname);
+      return; // ⛔ cortar ejecución
     }
 
-    // --- 2. Agregar la Fecha de Emisión ---
-    const emissionDate = new Date().toLocaleDateString('es-ES', {
-      year: 'numeric',
-      month: 'long',
-      day: 'numeric'
+    doc.setFont('helvetica', 'normal');
+    doc.setFontSize(12);
+    const lineHeight = 7;
+
+    // 🟦 Ordenar turnos por fecha (cronológico)
+    history = history.sort((a, b) => {
+      const da = new Date(a.created_at).getTime();
+      const db = new Date(b.created_at).getTime();
+      return da - db; // primero el más antiguo
     });
 
+    for (let i = 0; i < history.length; i++) {
+
+      const turno = history[i];
+      const block = this.formatTurno(turno, i + 1).split('\n');
+
+      for (const line of block) {
+
+        const lines = doc.splitTextToSize(line, MAX_WIDTH);
+
+        for (const l of lines) {
+
+          if (y + lineHeight > PAGE_HEIGHT - 20) {
+            doc.addPage();
+            this.drawHeader(doc, "Historia Clínica");
+            doc.setFont('helvetica', 'normal');
+            doc.setFontSize(12);
+            y = 40;
+          }
+
+          doc.text(l, MARGIN, y);
+          y += lineHeight;
+        }
+      }
+    }
+
+    // Separador entre turnos
+    y += 5;
+    doc.line(MARGIN, y, doc.internal.pageSize.getWidth() - MARGIN, y);
+    y += 10;
+
+
+    // Numeración de páginas
+    const total = doc.getNumberOfPages();
+    for (let i = 1; i <= total; i++) {
+      doc.setPage(i);
+      doc.setFontSize(10);
+      doc.text(
+        `Página ${i} de ${total}`,
+        doc.internal.pageSize.getWidth() / 2,
+        PAGE_HEIGHT - 10,
+        { align: 'center' }
+      );
+    }
+
+    // Guardar PDF SIEMPRE como “historiaClinica”
+    const d = new Date();
+    const fname = `historiaClinica_${d.getDate()}-${d.getMonth() + 1}-${d.getFullYear()}.pdf`;
+    doc.save(fname);
+  }
+
+
+  // ---------------------------------------------------------
+  //   ENCABEZADO
+  // ---------------------------------------------------------
+  private drawHeader(doc: jsPDF, title: string) {
+    const MARGIN = 15;
+
+    if (LOGO_BASE64 !== 'TU_LOGO_EN_BASE64_AQUI') {
+      doc.addImage(LOGO_BASE64, 'PNG', MARGIN, 8, 25, 10);
+    }
+
+    const emission = new Date().toLocaleDateString('es-ES');
     doc.setFontSize(10);
-    doc.text(`Fecha de Emisión: ${emissionDate}`, doc.internal.pageSize.getWidth() - MARGIN, 10, {
-      align: 'right'
-    });
+    doc.setFont('helvetica', 'normal');
+    doc.text(
+      `Fecha de emisión: ${emission}`,
+      doc.internal.pageSize.getWidth() - MARGIN,
+      12,
+      { align: 'right' }
+    );
 
-    // --- 3. Agregar el Título del Informe ('title') ---
     doc.setFontSize(18);
     doc.setFont('helvetica', 'bold');
-    yOffset += 5;
-    // Centrar el título
-    const titleX = doc.internal.pageSize.getWidth() / 2;
-    doc.text(title, titleX, yOffset, {
-      align: 'center'
-    });
+    doc.text(
+      title,
+      doc.internal.pageSize.getWidth() / 2,
+      25,
+      { align: 'center' }
+    );
 
-    // Línea separadora
-    doc.line(MARGIN, yOffset + 2, doc.internal.pageSize.getWidth() - MARGIN, yOffset + 2);
-    yOffset += 10; // Mover la posición hacia abajo
-
-    // --- 4. Agregar la Información de 'data' ---
-    doc.setFontSize(12);
-    doc.setFont('helvetica', 'normal');
-
-    // La función 'splitTextToSize' es esencial para manejar saltos de línea automáticos.
-    const splitData = doc.splitTextToSize(data, MAX_WIDTH);
-    doc.text(splitData, MARGIN, yOffset, {
-      align: 'left'
-    });
-
-    // La función 'save' genera y descarga el PDF directamente.
-    doc.save(`${this.cleanFileName(title)}-${new Date().getTime()}.pdf`);
+    doc.line(MARGIN, 28, doc.internal.pageSize.getWidth() - MARGIN, 28);
   }
 
-  /**
-   * Ayuda a limpiar el título para el nombre del archivo.
-   * @param name Nombre a limpiar.
-   * @returns Nombre limpio.
-   */
-  private cleanFileName(name: string): string {
-    return name.toLowerCase().replace(/ /g, '_').replace(/[^\w-]+/g, '');
+
+  // ---------------------------------------------------------
+  //   FORMATO DE CADA TURNO  (SIN DESCRIPCIÓN)
+  // ---------------------------------------------------------
+  private formatTurno(t: any, index: number): string {
+
+    return `
+--- Turno #${index} ---
+Paciente: ${t.user_name ?? 'No registrado'}
+Especialista: ${t.specialist_name ?? 'No registrado'}
+Especialidad: ${t.speciality ?? 'No registrado'}
+Día: ${t.day ?? '-'} - Hora: ${t.time ?? '-'}
+
+Altura: ${t.height ? t.height + ' cm' : 'No registrado'}
+Peso: ${t.weight ? t.weight + ' kg' : 'No registrado'}
+Presión: ${t.pressure ? t.pressure + ' mmHg' : 'No registrado'}
+Temperatura: ${t.temperature ? t.temperature + ' °C' : 'No registrado'}
+Datos: ${t.dynamic ?? 'No registrado'}
+
+Comentario final: ${t.commentary ?? 'Sin comentario'}
+Creado: ${this.formatDate(t.created_at)}
+Estado: ${t.is_end ? 'Finalizado' : 'Cancelado'}
+    `.trim();
   }
 
-  private getBase64ImageFromURL(url: string): Promise<string> {
-    return new Promise((resolve, reject) => {
+
+  private formatDate(d: string) {
+    if (!d) return '-';
+    const date = new Date(d);
+    if (isNaN(date.getTime())) return '-';
+    return `${String(date.getDate()).padStart(2, '0')}/${String(date.getMonth() + 1).padStart(2, '0')}/${date.getFullYear()}`;
+  }
+
+
+  private getBase64ImageFromURL(url: string) {
+    return new Promise<string>((resolve, reject) => {
       const img = new Image();
-      img.setAttribute('crossOrigin', 'anonymous');
+      img.crossOrigin = 'anonymous';
       img.onload = () => {
         const canvas = document.createElement('canvas');
         canvas.width = img.width;
         canvas.height = img.height;
-        const ctx = canvas.getContext('2d');
-        ctx?.drawImage(img, 0, 0);
-        const dataURL = canvas.toDataURL('image/png');
-        resolve(dataURL);
+        const ctx = canvas.getContext('2d')!;
+        ctx.drawImage(img, 0, 0);
+        resolve(canvas.toDataURL('image/png'));
       };
-      img.onerror = error => reject(error);
+      img.onerror = reject;
       img.src = url;
     });
   }
+
 }

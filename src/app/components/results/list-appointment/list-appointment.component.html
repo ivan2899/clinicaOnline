@@ -23,6 +23,7 @@
       <th>Activo</th>
       <th>Confirmado</th>
       <th>Creación</th>
+      <th>Cancelar</th>
     </tr>
   </thead>
   <tbody>
@@ -51,9 +52,16 @@
         </span>
       </td>
       <td>{{ formatDate(turn.created_at) }}</td>
+      <td><button *ngIf="turn.is_active && !turn.is_end && turn.is_confirm == null" class="btn btn-outline-danger" (click)="cancel(turn.id, turn)">Cancelar turno</button></td>
     </tr>
   </tbody>
 </table>
+
+<div class="filtros">
+  <button appHover class="btn" (click)="openSpecialityModal()">Filtrar por especialidad</button>
+  <button appHover class="btn" (click)="openSpecialistModal()">Filtrar por especialista</button>
+  <button appHover class="btn" (click)="clearFilters()">Limpiar filtros</button>
+</div>
 
 <!-- Paginación -->
 <div class="pagination" *ngIf="totalPages > 1">
@@ -65,4 +73,42 @@
   </button>
 
   <button (click)="goToPage(currentPage + 1)" [disabled]="currentPage === totalPages">&gt;</button>
+</div>
+
+<!-- Modal texto -->
+<div class="modal" *ngIf="showText">
+  <div class="modal-content">
+    <h3>Ingrese el motivo por el que no se va a realizar el turno:</h3>
+    <div class="modal-buttons">
+      <textarea appUpperCase appResizable name="txt" placeholder="Escribe el motivo ..." id="txt"
+        [(ngModel)]="text"></textarea>
+    </div>
+    <button class="btn btn-success" (click)="send()">Aceptar</button>
+  </div>
+</div>
+
+<!-- Modal Especialistas -->
+<div class="modal" *ngIf="showSpecialistModal">
+  <div class="modal-content">
+    <h3>Seleccionar especialista</h3>
+    <div class="modal-buttons">
+      <button *ngFor="let sp of specialists" (click)="filterBySpecialist(sp.id)">
+        {{ sp.nombreCompleto }}
+      </button>
+    </div>
+    <button class="close-btn" (click)="closeModals()">Cerrar</button>
+  </div>
+</div>
+
+<!-- Modal Especialidades -->
+<div class="modal" *ngIf="showSpecialityModal">
+  <div class="modal-content">
+    <h3>Seleccionar especialidad</h3>
+    <div class="modal-buttons">
+      <button *ngFor="let s of specialities" (click)="filterBySpeciality(s.nombre)">
+        {{ s.nombre }}
+      </button>
+    </div>
+    <button class="close-btn" (click)="closeModals()">Cerrar</button>
+  </div>
 </div>

@@ -46,8 +46,21 @@
             </div>
         </div>
 
-        <div class="col-md-3" *ngIf="role == 'Paciente' || role == 'Especialista'">
-            <div class="card game-card">
+                <div class="col-md-3" *ngIf="role == 'Admin'">
+            <div class="card game-card" routerLink="/graficos">
+                <img class="card-img-top"
+                    src="https://fuwqovndluczbpnnywse.supabase.co/storage/v1/object/public/images/clients/default/graphics.png"
+                    alt="Ahorcado">
+                <div class="card-body text-center">
+                    <h5 class="card-title">Gráficos</h5>
+                    <p class="card-text">Desde esta seccion se pueden ver y descargar diferentes tipos de graficos.
+                    </p>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-md-3" *ngIf="role == 'Especialista'">
+            <div class="card game-card" routerLink="/history">
                 <img class="card-img-top"
                     src="https://fuwqovndluczbpnnywse.supabase.co/storage/v1/object/public/images/clients/default/history.webp"
                     alt="Ahorcado">

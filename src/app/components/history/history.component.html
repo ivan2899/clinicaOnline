@@ -1,1 +1,57 @@
-<p>history works!</p>
+<table *ngIf="!loading && history.length > 0" class="fancy-table">
+  <thead>
+    <tr>
+      <th>Paciente</th>
+      <th>Especialista</th>
+      <th>Especialidad</th>
+      <th>Día</th>
+      <th>Hora</th>
+      <th>Altura</th>
+      <th>Peso</th>
+      <th>Temperatura</th>
+      <th>Presión</th>
+      <th>Datos Dinámicos</th>
+      <th>Comentario</th>
+      <th>Creación</th>
+      <th>Finalizado</th>
+      <!-- <th>Opciones</th> -->
+    </tr>
+  </thead>
+
+  <tbody>
+    <tr *ngFor="let item of paginatedHistory">
+      <td>{{ item.user_name || '-' }}</td>
+      <td>{{ item.specialist_name || '-' }}</td>
+      <td>{{ item.speciality || '-' }}</td>
+      <td>{{ item.day || '-' }}</td>
+      <td>{{ item.time || '-' }}</td>
+      <td>{{ item.height || '-' }}</td>
+      <td>{{ item.weight || '-' }}</td>
+      <td>{{ item.temperature || '-' }}</td>
+      <td>{{ item.pressure || '-' }}</td>
+      <td>{{ item.dinamic | json }}</td>
+      <td>{{ item.commentary || '-' }}</td>
+
+      <td>{{ formatDate(item.created_at) }}</td>
+
+      <td>
+        <span class="status"
+          [ngClass]="{
+            finished: item.is_end === true,
+            pending: item.is_end === false
+          }">
+          {{ item.is_end ? 'Sí' : 'No' }}
+        </span>
+      </td>
+
+      <!-- 
+      <td>
+        <button class="btn btn-info" (click)="verHistorial(item.id, item.user_name)">
+          Ver detalles
+        </button>
+      </td>-->
+    </tr>
+  </tbody>
+</table>
+
+<button class="btn btn-outline-info" (click)="descargaPDF()">Descargar pdf </button>

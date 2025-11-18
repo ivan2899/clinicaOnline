@@ -254,7 +254,7 @@ export class SupabaseService {
   async getUsers(): Promise<ProfileUser[]> {
     const { data, error } = await this.supabase
       .from('profiles')
-      .select('first_name, last_name, email, age, dni, first_photo_url, role, is_active, status')
+      .select('first_name, last_name, email, age, dni, first_photo_url, role, is_active, status, auth_id')
       .order('first_name', { ascending: true });
 
     if (error) {
@@ -332,7 +332,7 @@ export class SupabaseService {
     const { data: appointments, error } = await this.supabase
       .from('appointments')
       .select('*')
-      .eq('specialist_id', id);
+      .eq('specialist_id', id)
 
     if (error) {
       console.error('Error al obtener turnos:', error.message);
@@ -373,7 +373,8 @@ export class SupabaseService {
     const { data: appointments, error } = await this.supabase
       .from('appointments')
       .select('*')
-      .eq('user_id', id);
+      .eq('user_id', id)
+
 
     if (error) {
       console.error('Error al obtener turnos:', error.message);

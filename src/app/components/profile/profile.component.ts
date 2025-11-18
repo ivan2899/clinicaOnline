@@ -5,11 +5,12 @@ import { SpinnerService } from '../../services/spinner.service';
 import { FormsModule } from '@angular/forms';
 import { Subscription } from 'rxjs';
 import { AppointmentModule } from '../../modules/appointment/appointment.module';
+import { RouterLink } from '@angular/router';
 
 @Component({
   selector: 'app-profile',
   standalone: true,
-  imports: [CommonModule, FormsModule, AppointmentModule],
+  imports: [CommonModule, FormsModule, AppointmentModule, RouterLink],
   templateUrl: './profile.component.html',
   styleUrl: './profile.component.scss'
 })
@@ -39,27 +40,19 @@ export class ProfileComponent {
 
     this.spinnerService.show(); // ⬅️ Mostrar spinner al iniciar
     try {
-      console.log('1');
-
       // 1️⃣ Traer usuario autenticado
       const { data: authData, error: authError } = await this.supabaseService.waitWithTimeout(this.supabaseService.getCurrentUser(), 4000);
-      console.log('2');
 
       if (authError) {
         console.error('Error obteniendo usuario:', authError.message);
-        console.log('3');
-
         return;
       }
       if (!authData.user) {
         console.warn('No hay usuario logueado');
-        console.log('4');
-
         return;
       }
 
       this.id = authData.user.id;
-      console.log('5');
 
       // 2️⃣ Traer datos del perfil desde la tabla 'profiles'
       const { data: profileData, error: profileError } = await this.supabaseService.getClientData(this.id);
@@ -68,15 +61,12 @@ export class ProfileComponent {
         console.error('Error obteniendo perfil del usuario:', profileError.message);
         return;
       }
-      console.log('6');
 
       this.usuario = profileData;
       console.log('Usuario actual:', this.usuario);
-      console.log('7');
 
     } catch (err) {
       console.error('Error inesperado:', err);
-      console.log('e');
 
     } finally {
       this.spinnerService.hide(); // ⬅️ Ocultar spinner cuando termina, con éxito o error

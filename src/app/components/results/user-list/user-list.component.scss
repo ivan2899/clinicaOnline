@@ -120,24 +120,26 @@
 
 .esp {
   display: flex;
+  gap: 10px;
+  /* espacio entre los botones */
   justify-content: center;
-}
+  /* alineados a la izquierda */
+  margin: 10px 0;
+  /* separación arriba y abajo */
 
-.btn {
-  background-color: #20c997;
-  border: none;
-  border-radius: 8px;
-  padding: 8px;
-  color: white;
-  font-weight: bold;
-  cursor: pointer;
-  transition: all 0.3s ease;
-  position: absolute;
-  bottom: 30px;
-  width: 150px;
-}
+  .btn {
+    padding: 8px 16px;
+      background-color: #17a589;
+    /* verde */
+    color: white;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    font-weight: bold;
+    transition: background-color 0.3s;
+  }
 
-.btn:hover {
-  background-color: #17a589;
-  transform: scale(1.05);
+  .btn:hover {
+    transform: scale(1.05);
+  }
 }

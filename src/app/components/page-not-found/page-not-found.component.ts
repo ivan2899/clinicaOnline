@@ -130,8 +130,4 @@ export class PageNotFoundComponent {
     });
   }
 
-  generarPDF(){
-    this.pdfService.generatePdf('Historia clinica', 'Esta es una prueba para ver como se descarga el pdf')
-  }
-
 }

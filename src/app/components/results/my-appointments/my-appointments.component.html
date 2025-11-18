@@ -21,10 +21,11 @@
       <th>Día</th>
       <th>Hora</th>
       <th>Activo</th>
-      <th>Confirmado</th>
+      <th>Estado</th>
       <th>Creación</th>
       <th>Cancelar</th>
       <th *ngIf="role == 'Especialista'">Aceptar</th>
+      <th>Opciones</th>
     </tr>
   </thead>
   <tbody>
@@ -54,12 +55,28 @@
       </td>
       <td>{{ formatDate(turn.created_at) }}</td>
       <td>
-        <button class="btn btn-danger" (click)="cancel(turn.id)">Cancelar turno</button>
-        <button *ngIf="role == 'Especialista'" class="btn btn-outline-danger" (click)="reject(turn.id)">Rechazar turno</button>
+        <button *ngIf="role == 'Paciente' && turn.is_active && !turn.is_end" class="btn btn-outline-danger"
+          (click)="cancel(turn.id, turn)">Cancelar turno</button>
+        <button *ngIf="role == 'Especialista' && turn.is_active && !turn.is_end" class="btn btn-outline-danger"
+          (click)="cancel(turn.id, turn)">Rechazar turno</button>
       </td>
       <td *ngIf="role == 'Especialista'">
-        <button class="btn btn-success" (click)="confirm(turn.id)">Aceptar turno</button>
-        <button class="btn btn-warning" (click)="cancel(turn.id)">Finalizar turno</button>
+        <button *ngIf="turn.is_confirm == null" class="btn btn-success" (click)="confirm(turn.id)">Aceptar
+          turno</button>
+        <button *ngIf="turn.is_confirm == true && !turn.is_end" class="btn btn-warning"
+          (click)="finalize(turn.id, turn)">Finalizar turno</button>
+      </td>
+      <td><button class="btn btn btn-warning"
+          *ngIf="turn.is_active == false && (turn.is_confirm == false || turn.is_confirm == null)"
+          (click)="openMotivoModal(turn.id, 'cancel')">Ver motivo del rechazo</button>
+        <button class="btn btn btn-info" *ngIf="turn.is_end == true" (click)="openMotivoModal(turn.id, 'end')">Ver
+          reseña</button>
+        <button class="btn btn btn-info"
+          *ngIf="turn.is_end == true && turn.answered_survey == false && role == 'Paciente'"
+          (click)="survey(turn.id, 'survey')">Completar encuesta</button>
+        <button class="btn btn btn-info"
+          *ngIf="turn.answered_survey == true && turn.answered_attention == false && role == 'Paciente'"
+          (click)="survey(turn.id, 'attention')">Calificar atencion</button>
       </td>
     </tr>
   </tbody>
@@ -79,7 +96,8 @@
 
 <div class="filtros">
   <button appHover class="btn" (click)="openSpecialityModal()">Filtrar por especialidad</button>
-  <button appHover *ngIf="role == 'Paciente'" class="btn" (click)="openSpecialistModal()">Filtrar por especialista</button>
+  <button appHover *ngIf="role == 'Paciente'" class="btn" (click)="openSpecialistModal()">Filtrar por
+    especialista</button>
   <button appHover *ngIf="role == 'Especialista'" class="btn" (click)="openPatientModal()">Filtrar por paciente</button>
   <button appHover class="btn" (click)="clearFilters()">Limpiar filtros</button>
 </div>
@@ -127,13 +145,148 @@
 </div>
 }
 
-<!-- Modal texto -->
+<!-- Modal rechazo -->
 <div class="modal" *ngIf="showText">
   <div class="modal-content">
-    <h3>Ingrese el motivo por el que no va a realizar el turno:</h3>
+    <h3>Ingrese el motivo por el que no se va a realizar el turno:</h3>
     <div class="modal-buttons">
-      <textarea appUpperCase appResizable name="txt" placeholder="Escribe el motivo ..." id="txt" [(ngModel)]="text"></textarea>
+      <textarea appUpperCase appResizable name="txt" placeholder="Escribe el motivo ..." id="txt"
+        [(ngModel)]="text"></textarea>
     </div>
     <button class="btn btn-success" (click)="send()">Aceptar</button>
+  </div>
+</div>
+
+<!-- Modal Paciente-->
+<div class="modal" *ngIf="showDesc">
+  <div class="modal-content">
+    <h3>Ingrese los datos del paciente:</h3>
+
+    <div class="modal-body">
+
+      <!-- Altura -->
+      <label>Altura (cm):</label>
+      <input type="number" class="form-control" placeholder="Ej: 172" (keypress)="soloNumeros($event)"
+        [(ngModel)]="patientData.altura">
+
+      <!-- Peso -->
+      <label>Peso (kg):</label>
+      <input type="number" class="form-control" placeholder="Ej: 80" (keypress)="soloNumeros($event)"
+        [(ngModel)]="patientData.peso">
+
+      <!-- Temperatura -->
+      <label>Temperatura (°C):</label>
+      <input type="number" step="0.1" placeholder="Ej: 36.1" class="form-control" (keypress)="soloNumeros($event)"
+        [(ngModel)]="patientData.temperatura">
+
+      <!-- Presión -->
+      <label>Presión (mmHg):</label>
+      <input type="text" class="form-control" placeholder="120/80" (keypress)="soloPresion($event)"
+        [(ngModel)]="patientData.presion">
+
+      <!-- Descripcion -->
+      <label>Descripcion:</label>
+      <input type="text" class="form-control" placeholder="Escribe una descripcion del turno..."
+        [(ngModel)]="patientData.descripcion">
+
+      <div class="dynamic-form">
+        <h3>Campos personalizados</h3>
+
+        <div *ngFor="let campo of dynamicFields; let i = index" class="field-row">
+          <input type="text" placeholder="Clave" [(ngModel)]="campo.key" class="key-input">
+          <input type="text" placeholder="Valor" [(ngModel)]="campo.value" class="value-input">
+          <button class="btn btn-outline-danger" type="button" (click)="removeField(i)">Eliminar</button>
+        </div>
+
+        <button class="btn btn-outline-success" type="button" (click)="addField()">Agregar campo</button>
+      </div>
+
+    </div>
+
+    <div class="modal-buttons mt-3">
+      <button class="btn btn-success" (click)="end()">Aceptar</button>
+    </div>
+  </div>
+</div>
+
+<!-- Modal del motivo -->
+<div class="modal" *ngIf="showMotivoModal">
+  <div class="modal-content">
+
+    <h3>{{ motivoTitle }}</h3>
+
+    <div class="modal-body">
+      <p>{{ motivoText }}</p>
+    </div>
+
+    <div class="modal-footer">
+      <button class="btn btn-secondary" (click)="closeMotivoModal()">Cerrar</button>
+    </div>
+
+  </div>
+</div>
+
+<!-- Modal de encuesta -->
+<div class="modal" *ngIf="showSurvey">
+  <div class="modal-content">
+    <h3>Ingrese su experiencia:</h3>
+    <div class="modal-buttons">
+      <textarea appUpperCase appResizable name="txt" placeholder="Escriba su experiencia ..." id="txt"
+        [(ngModel)]="srvText"></textarea>
+    </div>
+    <button class="btn btn-success" (click)="saveSurvey()">Aceptar</button>
+  </div>
+</div>
+
+<!-- Modal de Calificación -->
+<div class="modal" *ngIf="showAttention">
+  <div class="modal-content">
+
+    <h3>Calificación de la atención</h3>
+
+    <div class="modal-body">
+
+      <!-- Pregunta 1 -->
+      <div class="question">
+        <label>Calificá la atención de nuestro equipo (0 Muy mala - 5 Excelente)</label>
+        <div class="radio-group">
+          <label *ngFor="let n of opciones" class="rad">
+            <input type="radio" name="atencion" [value]="n" [(ngModel)]="srvAttention">
+            {{ n }}
+          </label>
+        </div>
+      </div>
+      <hr>
+
+      <!-- Pregunta 2 -->
+      <div class="question">
+        <label>¿Qué tal te pareció la limpieza del lugar? (0 Muy sucio - 5 Excelente)</label>
+        <div class="radio-group">
+          <label *ngFor="let n of opciones" class="rad">
+            <input type="radio" name="limpieza" [value]="n" [(ngModel)]="srvClean">
+            {{ n }}
+          </label>
+        </div>
+      </div>
+      <hr>
+
+      <!-- Pregunta 3 -->
+      <div class="question">
+        <label>¿Cómo calificarias el estado del lugar? (0 Desastrozo - 5 Excelente)</label>
+        <div class="radio-group">
+          <label *ngFor="let n of opciones" class="rad">
+            <input type="radio" name="estadoLugar" [value]="n" [(ngModel)]="srvPlace">
+            {{ n }}
+          </label>
+        </div>
+      </div>
+
+    </div>
+
+    <div class="modal-footer">
+      <button class="btn btn-secondary" (click)="closeCalificacionModal()">Cancelar</button>
+      <button class="btn btn-primary" (click)="guardarCalificacion()">Enviar</button>
+    </div>
+
   </div>
 </div>

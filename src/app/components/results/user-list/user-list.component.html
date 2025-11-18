@@ -29,7 +29,7 @@
     </tr>
   </thead>
   <tbody>
-    <tr *ngFor="let user of paginatedUsers">
+    <tr *ngFor="let user of paginatedUsers" (click)="download(user)">
       <td>
         <img
           [src]="(user.first_photo_url || '') | defaultSpecialist"
@@ -74,6 +74,8 @@
   </tbody>
 </table>
 
+
+
 <!-- Paginación -->
 <div class="pagination" *ngIf="totalPages > 1">
   <button (click)="goToPage(currentPage - 1)" [disabled]="currentPage === 1">&lt;</button>
@@ -90,5 +92,6 @@
 </div>
 
 <div class="esp">
+  <button class="btn btn-success" (click)="descargarExcel()">Descargar excel con usuarios</button>
   <button class="btn" routerLink="/specialist-list">Especialistas</button>
 </div>
