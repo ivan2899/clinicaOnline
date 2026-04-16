@@ -176,6 +176,7 @@ Como admin podemos acceder a diferentes opciones como
 ### 🧪 Usuario de prueba
 
 Para los usuarios de prueba hay un acceso rápido para poder probar las funcionalidades
+
 ![Prueba](https://akcxrjaizfewxxpuaaxp.supabase.co/storage/v1/object/public/images/readme/login/quick.png)
 
 ---
