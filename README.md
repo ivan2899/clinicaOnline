@@ -33,9 +33,9 @@ Luego, abrir en el navegador:
 
 👨‍⚕️ Gestión de usuarios por roles:
     
-*:one:    Pacientes
-*:two:    Especialistas
-*:three:  Administradores
+* :one:    Pacientes
+* :two:    Especialistas
+* :three:  Administradores
 
 📅 Gestión de turnos médicos:
 
