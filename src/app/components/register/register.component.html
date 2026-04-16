@@ -1,12 +1,12 @@
 <div class="role-toggle-images">
   <div class="role-img" [class.active]="role === 'paciente'" (click)="setRole('paciente')">
-    <img src="https://fuwqovndluczbpnnywse.supabase.co/storage/v1/object/public/images/register/paciente.webp"
+    <img src="https://akcxrjaizfewxxpuaaxp.supabase.co/storage/v1/object/public/images/register/paciente.webp"
       alt="Paciente">
     <label>Paciente</label>
   </div>
 
   <div class="role-img" [class.active]="role === 'especialista'" (click)="setRole('especialista')">
-    <img src="https://fuwqovndluczbpnnywse.supabase.co/storage/v1/object/public/images/register/especialista.webp"
+    <img src="https://akcxrjaizfewxxpuaaxp.supabase.co/storage/v1/object/public/images/register/especialista.webp"
       alt="Especialista">
     <label>Especialista</label>
   </div>
@@ -95,7 +95,7 @@
 
 
         <div class="input-box file">
-          <input type="file" id="photo" formControlName="photo" (change)="onFileSelected($event, 'photo')">
+          <input type="file" id="photo" accept="image/*" (change)="onFileSelected($event, 'photo')">
           <label for="photo" id="fileLabel">Seleccionar imagen de perfil</label>
           <i class='bx bxs-image'></i>
         </div>
@@ -174,12 +174,12 @@
         </div>
 
         <div class="input-box file">
-          <input type="file" id="photo" (change)="onFileSelected($event, 'photo')">
+          <input type="file" id="photo" accept="image/*" (change)="onFileSelected($event, 'photo')">
           <label for="photo">Seleccionar foto 1</label>
         </div>
 
         <div class="input-box file">
-          <input type="file" id="photo2" (change)="onFileSelected($event, 'photo2')">
+          <input type="file" id="photo2" accept="image/*" (change)="onFileSelected($event, 'photo2')">
           <label for="photo2">Seleccionar foto 2</label>
         </div>
 
@@ -195,7 +195,7 @@
     <ngx-recaptcha2 [siteKey]="siteKey" (success)="onCaptchaResolved($event)">
     </ngx-recaptcha2> -->
 
-      <button class="btn" type="submit" [disabled]="registerForm.invalid || !captchaToken">Registrar</button>
+      <button class="btn" type="submit" [disabled]="registerForm.invalid">Registrar</button>
     </form>
   </div>
 </div>

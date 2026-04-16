@@ -148,13 +148,13 @@ export class SupabaseService {
   async saveUserDataEspecialist(user: User, firstName: string, lastName: string, age: number, dni: number, email: string, specialty: string, firstPhotoUrl: string) {
     return await this.supabase
       .from('profiles')
-      .insert([{ authId: user.id, first_name: firstName, last_name: lastName, email, age, dni, specialty, first_photo_url: firstPhotoUrl, status: 'pending', role: 'Especialista' }]);
+      .insert([{ auth_id: user.id, first_name: firstName, last_name: lastName, email, age, dni, specialty, first_photo_url: firstPhotoUrl, status: 'pending', role: 'Especialista' }]);
   }
 
   async saveUserAdmin(user: User, firstName: string, lastName: string, age: number, dni: number, email: string, url: string) {
     return await this.supabase
       .from('profiles')
-      .insert([{ authId: user.id, firstName, email, role: 'Admin' }]);
+      .insert([{ auth_id: user.id, firstName, email, role: 'Admin' }]);
   }
 
 

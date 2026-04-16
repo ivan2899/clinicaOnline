@@ -60,7 +60,7 @@ export class HomeComponent {
         this.role = roleData?.role || null;
         switch (this.role) {
           case 'Paciente':
-            this.text = 'Bienvenido, Paciente';
+            this.text = 'Mis turnos';
             break;
           case 'Especialista':
             this.text = 'Panel del Especialista';

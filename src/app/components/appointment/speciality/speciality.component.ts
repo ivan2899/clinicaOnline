@@ -24,9 +24,13 @@ export class SpecialityComponent {
 
     if (this.especialistaId != null) {
       const res = await this.appointmentService.getSpecialityWithSpecialist(this.especialistaId);
+
+      console.log(res);
+      
       if (res && res.data) {
         this.especialidades = res.data.map((e: any) => ({
           nombre: e.speciality,
+          
           imagen: e.img_url
         }));
       }

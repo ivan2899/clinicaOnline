@@ -14,7 +14,7 @@ export class PdfService {
 
   private async loadLogo() {
     LOGO_BASE64 = await this.getBase64ImageFromURL(
-      'https://fuwqovndluczbpnnywse.supabase.co/storage/v1/object/public/images/fondo/icon.webp'
+      'https://akcxrjaizfewxxpuaaxp.supabase.co/storage/v1/object/public/images/fondo/icon.webp'
     );
   }
 

@@ -31,8 +31,9 @@ export class HistoryComponent {
     const data = await this.supabaseService.getCurrentUser()
     if (data?.data?.user?.id) {
       this.userId = data?.data?.user?.id;
+      const rol = await this.supabaseService.getRole(this.userId);
 
-      if (data?.data?.user.role == 'Paciente') {
+      if (rol.data?.role == 'Paciente') {
         const dto = await this.appointmentService.getHistoryAppointmentPatient(data?.data?.user?.id);
         this.history = dto;
       } else {

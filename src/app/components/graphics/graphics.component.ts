@@ -74,7 +74,7 @@ export class GraphicsComponent implements OnInit {
   // ======================================================
   async loadLogChart() {
     const { data, error } = await this.supabaseService.client
-      .from('audit_log')
+      .from('logs')
       .select('*');
 
     if (error) {
@@ -268,10 +268,10 @@ export class GraphicsComponent implements OnInit {
     // 1) Obtener turnos finalizados dentro del rango
     const { data: appointments, error } = await this.supabaseService.client
       .from('appointments')
-      .select('specialist_id, is_end, updated_at')
+      .select('specialist_id, is_end, created_at')
       .eq('is_end', true)
-      .gte('updated_at', this.dateFrom2)
-      .lte('updated_at', this.dateTo2);
+      .gte('created_at', this.dateFrom2)
+      .lte('created_at', this.dateTo2);
 
     if (error) {
       console.error(error);
@@ -383,6 +383,7 @@ export class GraphicsComponent implements OnInit {
   }
 
   generateWeeks(count: number) {
+    this.weeks = [];
     const today = new Date();
 
     // Empezar desde la semana actual (lunes)

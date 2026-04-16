@@ -39,7 +39,7 @@ export class RegisterComponent {
     private messagesService: MessagesService,
     private uploadService: UploadService,
     private appointmentService: AppointmentService
-  ) {  }
+  ) { }
 
   async ngOnInit() {
     this.initForm();
@@ -65,6 +65,8 @@ export class RegisterComponent {
         password: ['', [Validators.required, Validators.minLength(6)]],
         confirmPassword: ['', Validators.required],
         healtInsurance: [''],
+        photo: [null, Validators.required],
+        photo2: [null, Validators.required]
       }, { validators: passwordMatchValidator });
     } else {
       this.registerForm = this.fb.group({
@@ -77,6 +79,7 @@ export class RegisterComponent {
         dni: ['', [Validators.required, dniValidator]],
         especialidad: ['', Validators.required],
         otraEspecialidad: [{ value: '', disabled: true }],
+        photo: [null, Validators.required],
       }, { validators: passwordMatchValidator });
     }
   }
@@ -103,6 +106,15 @@ export class RegisterComponent {
     if (!file) return;
 
     this.selectedFiles[controlName] = file;
+
+    // 🔥 Esto sincroniza con Angular Forms
+    this.registerForm.patchValue({
+      [controlName]: file
+    });
+
+    this.registerForm.get(controlName)?.updateValueAndValidity();
+
+    console.log('Form válido?', this.registerForm.valid);
   }
 
   soloNumeros(event: KeyboardEvent) {
@@ -115,7 +127,6 @@ export class RegisterComponent {
     this.captchaToken = token;
     console.log(`Token reCAPTCHA: ${token}`);
 
-    // Opcional: Si estás usando el modo invisible, puedes enviar el formulario aquí
     if (this.isSubmitted && token) {
       this.onSubmit();
     }

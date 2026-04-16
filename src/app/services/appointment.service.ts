@@ -40,10 +40,12 @@ export class AppointmentService {
     // 1️⃣ Buscar las especialidades del especialista
     const { data: profile, error: profileError } = await this.supabase.client
       .from('profiles')
-      .select('specialty')
+      .select('speciality')
       .eq('auth_id', specialist)
       .single();
 
+      console.log(profile);
+      
     if (profileError || !profile) {
       console.error('Error obteniendo especialidades del especialista:', profileError);
       return { data: null, error: profileError };
@@ -53,7 +55,10 @@ export class AppointmentService {
     const { data: specialtiesData, error: specialtiesError } = await this.supabase.client
       .from('specialitys')
       .select('speciality, img_url')
-      .in('speciality', profile.specialty); // 👈 como es array, va directo
+      .in('speciality', profile.speciality); // 👈 como es array, va directo
+
+      console.log(specialtiesData);
+
 
     if (specialtiesError) {
       console.error('Error obteniendo datos de las especialidades:', specialtiesError);
@@ -67,7 +72,7 @@ export class AppointmentService {
     const { data, error } = await this.supabase.client
       .from('profiles')
       .select('auth_id, first_name, last_name, first_photo_url')
-      .eq('specialty', speciality)
+      .eq('speciality', speciality)
 
     return { data, error };
   }
@@ -286,7 +291,7 @@ export class AppointmentService {
     const { data, error } = await this.supabase.client
       .from('history')
       .select('*')
-      .eq('specialty', id)
+      .eq('speciality', id)
 
     return { data, error };
   }
