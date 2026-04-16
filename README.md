@@ -33,45 +33,45 @@ Luego, abrir en el navegador:
 
 👨‍⚕️ Gestión de usuarios por roles:
     
-  Pacientes
-  Especialistas
-  Administradores
+*  Pacientes
+*  Especialistas
+*  Administradores
 
 📅 Gestión de turnos médicos:
 
-  Solicitud de turnos por parte del paciente
-  Selección de especialista y especialidad
-  Asignación de fecha y horario
-  Confirmación y cancelación de turnos
-  Estados del turno (activo, cancelado, finalizado)
+-  Solicitud de turnos por parte del paciente
+-  Selección de especialista y especialidad
+-  Asignación de fecha y horario
+-  Confirmación y cancelación de turnos
+-  Estados del turno (activo, cancelado, finalizado)
 
 🩺 Historia clínica digital:
 
-  Registro de consultas médicas
-  Carga de datos clínicos (altura, peso, presión, temperatura)
-  Observaciones y diagnósticos
-  Campos dinámicos personalizados por consulta
+-  Registro de consultas médicas
+-  Carga de datos clínicos (altura, peso, presión, temperatura)
+-  Observaciones y diagnósticos
+-  Campos dinámicos personalizados por consulta
 
 ⭐ Encuestas de atención médica:
 
-  Calificación del servicio (atención, limpieza, lugar)
-  Comentarios de los pacientes
+-  Calificación del servicio (atención, limpieza, lugar)
+-  Comentarios de los pacientes
 
 📊 Panel de administración:
 
-  Visualización de encuestas realizadas
-  Seguimiento de la actividad de los turnos
-  Acceso a estadísticas del sistema
+-  Visualización de encuestas realizadas
+-  Seguimiento de la actividad de los turnos
+-  Acceso a estadísticas del sistema
 
 🖼️ Gestión de perfiles:
 
-  Carga de imagen de usuario
-  Visualización de datos personales
+ - Carga de imagen de usuario
+ - Visualización de datos personales
 
 🔎 Visualización de historial:
 
-  Acceso al historial de turnos del paciente
-  Acceso al historial de pacientes para especialistas
+ - Acceso al historial de turnos del paciente
+ - Acceso al historial de pacientes para especialistas
 
 ---
 
